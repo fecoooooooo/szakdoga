@@ -398,3 +398,5 @@ FodyWeavers.xsd
 *.sln.iml
 
 Registry-Backend/Registry-Backend/obj/
+
+Registry-Backend/Registry-Backend/bin/

@@ -4,13 +4,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Registry_Backend.Models;
 
-public partial class RegistrydbContext : DbContext
+public partial class RegistryContext : DbContext
 {
-    public RegistrydbContext()
+    public RegistryContext()
     {
     }
 
-    public RegistrydbContext(DbContextOptions<RegistrydbContext> options)
+    public RegistryContext(DbContextOptions<RegistryContext> options)
         : base(options)
     {
     }
@@ -19,7 +19,7 @@ public partial class RegistrydbContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server=localhost;Database=registrydb;Trusted_Connection=True;TrustServerCertificate=True");
+        => optionsBuilder.UseSqlServer("Server=localhost;Database=registry;Trusted_Connection=True;TrustServerCertificate=True");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -30,10 +30,10 @@ public partial class RegistrydbContext : DbContext
                 .ToTable("Sample");
 
             entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.Name)
+            entity.Property(e => e.Key)
                 .HasMaxLength(10)
                 .IsFixedLength()
-                .HasColumnName("name");
+                .HasColumnName("key");
         });
 
         OnModelCreatingPartial(modelBuilder);

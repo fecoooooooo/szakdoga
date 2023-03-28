@@ -7,7 +7,7 @@ Install-Package Microsoft.VisualStudio.Web.CodeGeneration.Design
 Install-Package Microsoft.EntityFrameworkCore.Tools
 
 - Making database models from your database:
-Scaffold-DbContext “Server=localhost;Database=registrydb;Trusted_Connection=True;TrustServerCertificate=True” Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models
+Scaffold-DbContext “Server=localhost;Database=registry;Trusted_Connection=True;TrustServerCertificate=True” Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models
 
 - Add The Following Connection String in your appsettings :
 
@@ -20,7 +20,7 @@ add-migration initial
 
 Run the following to update your database models run :
 
-Scaffold-DbContext “Server=localhost;Database=registrydb;Trusted_Connection=True;TrustServerCertificate=True” Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models
+Scaffold-DbContext “Server=localhost;Database=registry;Trusted_Connection=True;TrustServerCertificate=True” Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -force
 
 
 

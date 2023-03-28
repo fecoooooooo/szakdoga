@@ -10,7 +10,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDbContext<RegistrydbContext>(opt => opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddDbContext<RegistryContext>(opt => opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"), 
+													options => options.EnableRetryOnFailure()));
 
 var app = builder.Build();
 

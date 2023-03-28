@@ -8,9 +8,9 @@ namespace Registry_Backend.Controllers
 	[Route("[controller]")]
 	public class WeatherForecastController : ControllerBase
 	{
-		private readonly RegistrydbContext dbContext;
+		private readonly RegistryContext dbContext;
 
-		public WeatherForecastController(RegistrydbContext dbContext)
+		public WeatherForecastController(RegistryContext dbContext)
 		{
 			this.dbContext = dbContext;
 		}
