@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Registry_Backend.Models;
+using System.Net;
 
 namespace Registry_Backend.Controllers
 {
@@ -19,19 +20,16 @@ namespace Registry_Backend.Controllers
 		[ProducesResponseType(typeof(List<Sample>), StatusCodes.Status200OK)]
 		public IActionResult GetSamples()
 		{
-			try
+			using (var client = new WebClient())
 			{
-				var result = dbContext.Samples.ToList();
-				if (result != null)
-					return Ok(result);
-				
-				return Ok("No rows in Sample table");
+				client.DownloadFile("https://localhost:44301/swagger/v1/swagger.json", "..\\..\\registry\\swagger\\swagger.json");
+			}
 
-			}
-			catch (Exception ex)
-			{
-				return BadRequest(ex.Message);
-			}
+			var result = dbContext.Samples.ToList();
+			if (result != null)
+				return Ok(result);
+
+			return Ok("No rows in Sample table");
 		}
 	}
 }
