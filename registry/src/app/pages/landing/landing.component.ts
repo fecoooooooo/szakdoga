@@ -7,12 +7,10 @@ import { WeatherForecastService } from 'api-clients/api';
   styleUrls: ['./landing.component.scss'],
 })
 export class LandingComponent implements OnInit {
-  constructor(private weatherForecastService: WeatherForecastService) {}
+  constructor(private service: WeatherForecastService) {}
   ngOnInit(): void {
-    this.weatherForecastService
-      .weatherForecastGetSampleDataGet()
-      .subscribe((r) => {
-        console.log(r);
-      });
+    this.service.weatherForecastGetSampleDataGet().subscribe((r) => {
+      console.log(r);
+    });
   }
 }

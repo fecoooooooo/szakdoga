@@ -16,15 +16,15 @@ namespace Registry_Backend.Controllers
 		}
 
 		[HttpGet("GetSampleData")]
+		[ProducesResponseType(typeof(List<Sample>), StatusCodes.Status200OK)]
 		public IActionResult GetSamples()
 		{
 			try
 			{
 				var result = dbContext.Samples.ToList();
 				if (result != null)
-				{
 					return Ok(result);
-				}
+				
 				return Ok("No rows in Sample table");
 
 			}

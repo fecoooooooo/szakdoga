@@ -16,6 +16,8 @@ import { HttpClient, HttpHeaders, HttpParams, HttpContextToken,
 import { CustomHttpParameterCodec }                          from '../encoder';
 import { Observable }                                        from 'rxjs';
 
+// @ts-ignore
+import { Sample } from '../model/sample';
 
 // @ts-ignore
 import { BASE_PATH, LOADER_TYPE_TOKEN, COLLECTION_FORMATS }                     from '../variables';
@@ -101,15 +103,18 @@ export class WeatherForecastService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public weatherForecastGetSampleDataGet(loaderType?: 'info' | 'lock' | 'default', observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any>;
-    public weatherForecastGetSampleDataGet(loaderType?: 'info' | 'lock' | 'default', observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpResponse<any>>;
-    public weatherForecastGetSampleDataGet(loaderType?: 'info' | 'lock' | 'default', observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpEvent<any>>;
-    public weatherForecastGetSampleDataGet(loaderType?: 'info' | 'lock' | 'default', observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any> {
+    public weatherForecastGetSampleDataGet(loaderType?: 'info' | 'lock' | 'default', observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<Array<Sample>>;
+    public weatherForecastGetSampleDataGet(loaderType?: 'info' | 'lock' | 'default', observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpResponse<Array<Sample>>>;
+    public weatherForecastGetSampleDataGet(loaderType?: 'info' | 'lock' | 'default', observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpEvent<Array<Sample>>>;
+    public weatherForecastGetSampleDataGet(loaderType?: 'info' | 'lock' | 'default', observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<any> {
         let lvHeaders = this.defaultHeaders;
         let lvHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
         if (lvHttpHeaderAcceptSelected === undefined) {
             // to determine the Accept header
             const httpHeaderAccepts: string[] = [
+                'text/plain',
+                'application/json',
+                'text/json'
             ];
             lvHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
         }
@@ -135,7 +140,7 @@ export class WeatherForecastService {
             }
         }
         let lvPath = `/WeatherForecast/GetSampleData`;
-        return this.httpClient.request<any>('get', `${this.configuration.basePath}${lvPath}`,
+        return this.httpClient.request<Array<Sample>>('get', `${this.configuration.basePath}${lvPath}`,
             {
                 context: lvHttpContext,
                 responseType: <any>responseType_,

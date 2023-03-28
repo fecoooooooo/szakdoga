@@ -34,6 +34,11 @@ public partial class RegistryContext : DbContext
                 .HasMaxLength(10)
                 .IsFixedLength()
                 .HasColumnName("key");
+            entity.Property(e => e.Name)
+                .HasMaxLength(10)
+                .IsFixedLength()
+                .HasColumnName("name");
+            entity.Property(e => e.Something).HasColumnName("something");
         });
 
         OnModelCreatingPartial(modelBuilder);
