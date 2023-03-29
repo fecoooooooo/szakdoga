@@ -47,3 +47,24 @@ builder.Services.AddDbContext<RegistrydbContext>(opt => opt.UseSqlServer(builder
 		
 		
 java -jar openapi-generator-cli/openapi-generator-cli.jar generate -t openapi-generator-cli/template -i c:\swagger.json -g typescript-angular -o api-clients/api 
+
+aspnetusers:
+	PM> Install-Package Microsoft.AspNet.Identity.Core
+	PM> Microsoft.AspNetCore.Identity.EntityFrameworkCore; 
+	
+	RegistryCOntext.cs
+		...
+		RegistryContext : IdentityDbContext 
+		...
+		protected override void OnModelCreating(ModelBuilder modelBuilder)
+		{
+			base.OnModelCreating(modelBuilder);		
+			...
+	Program.cs
+		...
+		builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<RegistryContext>(); 
+		...
+	
+	PM> add-migration AddedMgration
+	PM> Update-Database
+	

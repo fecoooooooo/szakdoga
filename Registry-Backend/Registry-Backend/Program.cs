@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Registry_Backend.Models;
 
@@ -22,6 +23,8 @@ builder.Services.AddCors(options =>
 			   .AllowAnyHeader();
 	});
 });
+
+builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<RegistryContext>();
 
 var app = builder.Build();
 

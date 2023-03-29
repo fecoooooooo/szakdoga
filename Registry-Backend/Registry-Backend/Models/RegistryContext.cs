@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Registry_Backend.Models;
 
-public partial class RegistryContext : DbContext
+public partial class RegistryContext : IdentityDbContext 
 {
     public RegistryContext()
     {
@@ -23,7 +24,8 @@ public partial class RegistryContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Sample>(entity =>
+		base.OnModelCreating(modelBuilder);
+		modelBuilder.Entity<Sample>(entity =>
         {
             entity
                 .HasNoKey()

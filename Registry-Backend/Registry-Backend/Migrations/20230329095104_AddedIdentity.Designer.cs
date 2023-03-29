@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Registry_Backend.Models;
 
@@ -11,9 +12,11 @@ using Registry_Backend.Models;
 namespace Registry_Backend.Migrations
 {
     [DbContext(typeof(RegistryContext))]
-    partial class RegistryContextModelSnapshot : ModelSnapshot
+    [Migration("20230329095104_AddedIdentity")]
+    partial class AddedIdentity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
