@@ -41,7 +41,13 @@ public partial class AspNetUser
 
     public virtual ICollection<AspNetUserToken> AspNetUserTokens { get; } = new List<AspNetUserToken>();
 
+    public virtual ICollection<DeviceHistory> DeviceHistories { get; } = new List<DeviceHistory>();
+
     public virtual ICollection<Device> Devices { get; } = new List<Device>();
+
+    public virtual ICollection<SoftwareHistory> SoftwareHistories { get; } = new List<SoftwareHistory>();
+
+    public virtual ICollection<Software> Softwares { get; } = new List<Software>();
 
     public virtual ICollection<AspNetRole> Roles { get; } = new List<AspNetRole>();
 }

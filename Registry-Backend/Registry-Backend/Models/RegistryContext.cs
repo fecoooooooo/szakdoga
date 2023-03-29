@@ -31,7 +31,13 @@ public partial class RegistryContext : DbContext
 
     public virtual DbSet<Device> Devices { get; set; }
 
+    public virtual DbSet<DeviceHistory> DeviceHistories { get; set; }
+
     public virtual DbSet<Sample> Samples { get; set; }
+
+    public virtual DbSet<Software> Softwares { get; set; }
+
+    public virtual DbSet<SoftwareHistory> SoftwareHistories { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
@@ -134,6 +140,19 @@ public partial class RegistryContext : DbContext
                 .HasConstraintName("FK_Device_AspNetUsers");
         });
 
+        modelBuilder.Entity<DeviceHistory>(entity =>
+        {
+            entity.ToTable("DeviceHistory");
+
+            entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.UserId).HasMaxLength(450);
+
+            entity.HasOne(d => d.User).WithMany(p => p.DeviceHistories)
+                .HasForeignKey(d => d.UserId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_DeviceHistory_AspNetUsers");
+        });
+
         modelBuilder.Entity<Sample>(entity =>
         {
             entity
@@ -150,6 +169,43 @@ public partial class RegistryContext : DbContext
                 .IsFixedLength()
                 .HasColumnName("name");
             entity.Property(e => e.Something).HasColumnName("something");
+        });
+
+        modelBuilder.Entity<Software>(entity =>
+        {
+            entity.ToTable("Software");
+
+            entity.HasIndex(e => e.License, "IX_Software").IsUnique();
+
+            entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.Description).HasMaxLength(250);
+            entity.Property(e => e.License).HasMaxLength(50);
+            entity.Property(e => e.Name).HasMaxLength(250);
+            entity.Property(e => e.Price).HasColumnType("decimal(18, 2)");
+            entity.Property(e => e.ProductLink).HasMaxLength(250);
+            entity.Property(e => e.UserId).HasMaxLength(450);
+
+            entity.HasOne(d => d.User).WithMany(p => p.Softwares)
+                .HasForeignKey(d => d.UserId)
+                .HasConstraintName("FK_Software_Software");
+        });
+
+        modelBuilder.Entity<SoftwareHistory>(entity =>
+        {
+            entity.ToTable("SoftwareHistory");
+
+            entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.UserId).HasMaxLength(450);
+
+            entity.HasOne(d => d.Software).WithMany(p => p.SoftwareHistories)
+                .HasForeignKey(d => d.SoftwareId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_SoftwareHistory_Software");
+
+            entity.HasOne(d => d.User).WithMany(p => p.SoftwareHistories)
+                .HasForeignKey(d => d.UserId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_SoftwareHistory_AspNetUsers");
         });
 
         OnModelCreatingPartial(modelBuilder);
