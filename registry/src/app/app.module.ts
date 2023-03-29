@@ -6,10 +6,40 @@ import { WeatherForecastService } from 'api-clients/api';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LandingComponent } from './pages/landing/landing.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatListModule } from '@angular/material/list';
+import { ListUsersComponent } from './pages/list-users/list-users.component';
+import { ListDevicesComponent } from './pages/list-devices/list-devices.component';
+import { ListSoftwaresComponent } from './pages/list-softwares/list-softwares.component';
+import { EditUserComponent } from './pages/edit-user/edit-user.component';
+import { EditDeviceComponent } from './pages/edit-device/edit-device.component';
+import { EditSoftwareComponent } from './pages/edit-software/edit-software.component';
+import { DeviceLifecycleComponent } from './pages/device-lifecycle/device-lifecycle.component';
+import { SoftwareLifecycleComponent } from './pages/software-lifecycle/software-lifecycle.component';
+import { UserSoftwaresComponent } from './pages/user-softwares/user-softwares.component';
+import { UserDevicesComponent } from './pages/user-devices/user-devices.component';
+import { NotFoundComponent } from './pages/not-found/not-found.component';
+import { AuthenticationComponent } from './pages/authentication/authentication.component';
 
 @NgModule({
-  declarations: [AppComponent, LandingComponent],
-  imports: [BrowserModule, AppRoutingModule, HttpClientModule],
+  declarations: [AppComponent, LandingComponent, ListUsersComponent, ListDevicesComponent, ListSoftwaresComponent, EditUserComponent, EditDeviceComponent, EditSoftwareComponent, DeviceLifecycleComponent, SoftwareLifecycleComponent, UserSoftwaresComponent, UserDevicesComponent, NotFoundComponent, AuthenticationComponent],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    HttpClientModule,
+    BrowserAnimationsModule,
+    MatToolbarModule,
+    MatSidenavModule,
+    MatButtonModule,
+    MatIconModule,
+    MatDividerModule,
+    MatListModule,
+  ],
   providers: [WeatherForecastService],
   bootstrap: [AppComponent],
 })

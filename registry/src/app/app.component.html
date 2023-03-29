@@ -1,1 +1,41 @@
-<router-outlet></router-outlet>
+<mat-toolbar color="primary" class="example-toolbar">
+  <h1 class="example-app-name">Nyilvántartás</h1>
+</mat-toolbar>
+<mat-sidenav-container class="example-container" autosize>
+  <mat-sidenav #sidenav class="example-sidenav" mode="side" opened="true">
+    <mat-nav-list>
+      <mat-list-item routerLink="/list-users" class="parent">
+        <mat-icon>person</mat-icon>
+        <span class="full-width"> Felhasználók</span>
+      </mat-list-item>
+
+      <mat-list-item routerLink="/list-devices" class="parent">
+        <mat-icon>computer</mat-icon>
+        <span class="full-width"> Eszközök</span>
+      </mat-list-item>
+
+      <mat-list-item routerLink="/list-softwares" class="parent">
+        <mat-icon>description</mat-icon>
+        <span class="full-width"> Szoftverek</span>
+      </mat-list-item>
+
+      <mat-list-item routerLink="/user-devices" class="parent">
+        <mat-icon>add_to_photos</mat-icon>
+        <span class="full-width"> Felhasználó eszközei</span>
+      </mat-list-item>
+
+      <mat-list-item routerLink="/user-softwares" class="parent">
+        <mat-icon>adjust</mat-icon>
+        <span class="full-width"> Felhasználó szoftverei</span>
+      </mat-list-item>
+
+      <mat-list-item routerLink="/logout" class="parent">
+        <mat-icon>exit_to_app</mat-icon>
+        <span class="full-width"> Kijelentkezés</span>
+      </mat-list-item>
+    </mat-nav-list>
+    <mat-nav-list> </mat-nav-list>
+  </mat-sidenav>
+
+  <div class="example-sidenav-content"><router-outlet></router-outlet></div>
+</mat-sidenav-container>
