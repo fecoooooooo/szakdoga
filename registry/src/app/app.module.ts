@@ -28,6 +28,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { DevicesService } from 'api-clients/api';
+import { MatTableModule } from '@angular/material/table';
+import { BooleanToHunPipe } from './pipes/boolean-to-hun.pipe';
 
 @NgModule({
   declarations: [
@@ -45,6 +47,7 @@ import { DevicesService } from 'api-clients/api';
     UserDevicesComponent,
     NotFoundComponent,
     AuthenticationComponent,
+    BooleanToHunPipe,
   ],
   imports: [
     BrowserModule,
@@ -60,6 +63,7 @@ import { DevicesService } from 'api-clients/api';
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
+    MatTableModule,
   ],
   providers: [DevicesService],
   bootstrap: [AppComponent],

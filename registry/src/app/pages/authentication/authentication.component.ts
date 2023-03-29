@@ -37,4 +37,8 @@ export class AuthenticationComponent {
   isLoggedIn() {
     return this.authService.isLoggedIn();
   }
+
+  login() {
+    this.authService.login();
+  }
 }
