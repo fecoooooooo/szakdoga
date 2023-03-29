@@ -1,22 +1,21 @@
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
 using Registry_Backend.Models;
 using System.Net;
 
 namespace Registry_Backend.Controllers
 {
 	[ApiController]
-	[Route("[controller]")]
-	public class WeatherForecastController : ControllerBase
+	[Route("api/[controller]")]
+	public class AuthenticationController : ControllerBase
 	{
 		private readonly RegistryContext dbContext;
 
-		public WeatherForecastController(RegistryContext dbContext)
+		public AuthenticationController(RegistryContext dbContext)
 		{
 			this.dbContext = dbContext;
 		}
 
-		[HttpGet("GetSampleData")]
+		[HttpGet("GenerateSwaggerJson")]
 		[ProducesResponseType(typeof(List<Sample>), StatusCodes.Status200OK)]
 		public IActionResult GetSamples()
 		{
@@ -25,11 +24,7 @@ namespace Registry_Backend.Controllers
 				client.DownloadFile("https://localhost:44301/swagger/v1/swagger.json", "..\\..\\registry\\swagger\\swagger.json");
 			}
 
-			var result = dbContext.Samples.ToList();
-			if (result != null)
-				return Ok(result);
-
-			return Ok("No rows in Sample table");
+			return Ok("OK");
 		}
 	}
 }

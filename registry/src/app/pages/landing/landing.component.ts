@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { WeatherForecastService } from 'api-clients/api';
 
 @Component({
   selector: 'app-landing',
@@ -7,10 +6,6 @@ import { WeatherForecastService } from 'api-clients/api';
   styleUrls: ['./landing.component.scss'],
 })
 export class LandingComponent implements OnInit {
-  constructor(private service: WeatherForecastService) {}
-  ngOnInit(): void {
-    this.service.weatherForecastGetSampleDataGet().subscribe((r) => {
-      console.log(r);
-    });
-  }
+  constructor() {}
+  ngOnInit(): void {}
 }

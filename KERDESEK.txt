@@ -1,0 +1,3 @@
+autentikacio backend
+proxy url csere
+swagger certificate

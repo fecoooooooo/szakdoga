@@ -2,7 +2,8 @@ import { NgModule, ModuleWithProviders, SkipSelf, Optional } from '@angular/core
 import { Configuration } from './configuration';
 import { HttpClient } from '@angular/common/http';
 
-import { WeatherForecastService } from './api/weatherForecast.service';
+import { AuthenticationService } from './api/authentication.service';
+import { DevicesService } from './api/devices.service';
 
 @NgModule({
   imports:      [],

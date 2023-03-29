@@ -1,7 +1,6 @@
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { WeatherForecastService } from 'api-clients/api';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -25,9 +24,28 @@ import { UserSoftwaresComponent } from './pages/user-softwares/user-softwares.co
 import { UserDevicesComponent } from './pages/user-devices/user-devices.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { AuthenticationComponent } from './pages/authentication/authentication.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { DevicesService } from 'api-clients/api';
 
 @NgModule({
-  declarations: [AppComponent, LandingComponent, ListUsersComponent, ListDevicesComponent, ListSoftwaresComponent, EditUserComponent, EditDeviceComponent, EditSoftwareComponent, DeviceLifecycleComponent, SoftwareLifecycleComponent, UserSoftwaresComponent, UserDevicesComponent, NotFoundComponent, AuthenticationComponent],
+  declarations: [
+    AppComponent,
+    LandingComponent,
+    ListUsersComponent,
+    ListDevicesComponent,
+    ListSoftwaresComponent,
+    EditUserComponent,
+    EditDeviceComponent,
+    EditSoftwareComponent,
+    DeviceLifecycleComponent,
+    SoftwareLifecycleComponent,
+    UserSoftwaresComponent,
+    UserDevicesComponent,
+    NotFoundComponent,
+    AuthenticationComponent,
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -39,8 +57,11 @@ import { AuthenticationComponent } from './pages/authentication/authentication.c
     MatIconModule,
     MatDividerModule,
     MatListModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
   ],
-  providers: [WeatherForecastService],
+  providers: [DevicesService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

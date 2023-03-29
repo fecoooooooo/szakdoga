@@ -2,7 +2,13 @@
   <h1 class="example-app-name">Nyilvántartás</h1>
 </mat-toolbar>
 <mat-sidenav-container class="example-container" autosize>
-  <mat-sidenav #sidenav class="example-sidenav" mode="side" opened="true">
+  <mat-sidenav
+    #sidenav
+    class="example-sidenav"
+    mode="side"
+    opened="true"
+    *ngIf="isLoggedIn()"
+  >
     <mat-nav-list>
       <mat-list-item routerLink="/list-users" class="parent">
         <mat-icon>person</mat-icon>
@@ -29,7 +35,7 @@
         <span class="full-width"> Felhasználó szoftverei</span>
       </mat-list-item>
 
-      <mat-list-item routerLink="/logout" class="parent">
+      <mat-list-item class="parent">
         <mat-icon>exit_to_app</mat-icon>
         <span class="full-width"> Kijelentkezés</span>
       </mat-list-item>

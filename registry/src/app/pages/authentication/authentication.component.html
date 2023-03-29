@@ -1,1 +1,20 @@
-<p>authentication works!</p>
+<div class="container">
+  <div *ngIf="isLoggedIn()"></div>
+  <div *ngIf="!isLoggedIn()" class="row">
+    <form [formGroup]="form">
+      <mat-form-field class="col-12">
+        <mat-label>Felhasználónév</mat-label>
+        <input matInput type="text" [formControl]="usernameControl" />
+        <mat-error>Kötelező</mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="col-12">
+        <mat-label>Jelszó</mat-label>
+        <input matInput type="password" [formControl]="passwordControl" />
+        <mat-error>Kötelező</mat-error>
+      </mat-form-field>
+
+      <button class="btn btn-primary">Login</button>
+    </form>
+  </div>
+</div>
