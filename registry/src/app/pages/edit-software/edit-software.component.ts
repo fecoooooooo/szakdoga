@@ -60,9 +60,7 @@ export class EditSoftwareComponent {
         null,
         Validators.required
       )),
-      productLinkControl: (this.productLinkControl = new FormControl(
-        Validators.required
-      )),
+      productLinkControl: (this.productLinkControl = new FormControl(null)),
       userIdControl: (this.userIdControl = new FormControl(null)),
       isActiveControl: (this.isActiveControl = new FormControl(false)),
     });

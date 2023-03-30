@@ -56,7 +56,7 @@ export class EditDeviceComponent implements OnInit {
         null,
         Validators.required
       )),
-      linkControl: (this.linkControl = new FormControl(Validators.required)),
+      linkControl: (this.linkControl = new FormControl(null)),
       userIdControl: (this.userIdControl = new FormControl(null)),
       isActiveControl: (this.isActiveControl = new FormControl(false)),
     });

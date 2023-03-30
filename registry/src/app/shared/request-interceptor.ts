@@ -7,7 +7,7 @@ import {
   HttpResponse,
   HttpErrorResponse,
 } from '@angular/common/http';
-import { catchError, Observable, throwError } from 'rxjs';
+import { catchError, Observable, tap, throwError } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 
 @Injectable()
@@ -19,6 +19,21 @@ export class RequestInterceptor implements HttpInterceptor {
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
     return next.handle(req).pipe(
+      tap((e) => {
+        console.log(req.method);
+
+        if (e instanceof HttpResponse) {
+          if (
+            req.method === 'PATCH' ||
+            req.method === 'PUT' ||
+            req.method === 'POST' ||
+            req.method === 'DELETE'
+          ) {
+            console.log(req.method);
+            this.toastrService.success('', 'Sikeres művelet');
+          }
+        }
+      }),
       catchError((err) => {
         if (err.status === 400 || err.status === 500) {
           this.toastrService.error(err.statusText, 'Hiba');
