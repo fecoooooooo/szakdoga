@@ -16,3 +16,5 @@ docker, kitelepites
 swagger generalas
 foreign key dolgok
 auto increment
+bg color selected menu item
+azonosito helyett felhasznalo nev midnenhol

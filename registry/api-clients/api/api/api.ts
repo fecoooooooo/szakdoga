@@ -2,4 +2,6 @@ export * from './authentication.service';
 import { AuthenticationService } from './authentication.service';
 export * from './devices.service';
 import { DevicesService } from './devices.service';
-export const APIS = [AuthenticationService, DevicesService];
+export * from './users.service';
+import { UsersService } from './users.service';
+export const APIS = [AuthenticationService, DevicesService, UsersService];

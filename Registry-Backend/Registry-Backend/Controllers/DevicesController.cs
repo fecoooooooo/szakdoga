@@ -24,7 +24,7 @@ namespace Registry_Backend.Controllers
 			if (result != null)
 				return Ok(result);
 
-			return Ok("No rows in table");
+			return NotFound("No rows in table");
 		}
 
 		[HttpGet("Single/{id}")]
@@ -35,7 +35,7 @@ namespace Registry_Backend.Controllers
 			if (device != null)
 				return Ok(device);
 
-			return Ok($"No device with id: {id}");
+			return NotFound($"No device with id: {id}");
 		}
 
 		[HttpDelete("Delete/{id}")]
@@ -50,42 +50,42 @@ namespace Registry_Backend.Controllers
 				return Ok("OK");
 			}
 
-			return Ok($"No device with id: {id}");
+			return NotFound($"No device with id: {id}");
 		}
 
 
 		[HttpPatch("UpdateDevice")]
 		[ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
-		public IActionResult UpdateDevice([FromBody] Device newDeviceData)
+		public IActionResult UpdateDevice([FromBody] Device device)
 		{
-			var device = dbContext.Devices.Where(x => x.Id == newDeviceData.Id).FirstOrDefault();
-			if (device != null)
+			var oldDevice = dbContext.Devices.Where(x => x.Id == device.Id).FirstOrDefault();
+			if (oldDevice != null)
 			{
-				device.SerialNumber = newDeviceData.SerialNumber;
-				device.Name = newDeviceData.Name;
-				device.Description = newDeviceData.Description;
-				device.Price = newDeviceData.Price;
-				device.Link = newDeviceData.Link;
-				device.UserId = newDeviceData.UserId;
-				device.IsActive = newDeviceData.IsActive;
+				oldDevice.SerialNumber = device.SerialNumber;
+				oldDevice.Name = device.Name;
+				oldDevice.Description = device.Description;
+				oldDevice.Price = device.Price;
+				oldDevice.Link = device.Link;
+				oldDevice.UserId = device.UserId;
+				oldDevice.IsActive = device.IsActive;
 
-				dbContext.Devices.Update(device);
+				dbContext.Devices.Update(oldDevice);
 				dbContext.SaveChanges();
 			
 				return Ok("OK");
 			}
 
-			return Ok($"No device with id: {newDeviceData.Id}");
+			return NotFound($"No device with id: {device.Id}");
 		}
 
 		[HttpPost("AddDevice")]
 		[ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
-		public IActionResult AddDevice([FromBody] Device newDevice)
+		public IActionResult AddDevice([FromBody] Device device)
 		{
 			int maxId = dbContext.Devices.Max(x => x.Id);
 
-			newDevice.Id = maxId + 1;
-			dbContext.Devices.Add(newDevice);
+			device.Id = maxId + 1;
+			dbContext.Devices.Add(device);
 			dbContext.SaveChanges();
 
 			return Ok("OK");

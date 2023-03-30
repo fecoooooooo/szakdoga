@@ -4,11 +4,13 @@ api.module.ts
 api/api.ts
 api/authentication.service.ts
 api/devices.service.ts
+api/users.service.ts
 configuration.ts
 encoder.ts
 git_push.sh
 index.ts
 model/device.ts
+model/identityUser.ts
 model/models.ts
 model/sample.ts
 param.ts

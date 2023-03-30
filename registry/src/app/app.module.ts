@@ -27,13 +27,19 @@ import { AuthenticationComponent } from './pages/authentication/authentication.c
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { AuthenticationService, DevicesService } from 'api-clients/api';
+import {
+  AuthenticationService,
+  DevicesService,
+  UsersService,
+} from 'api-clients/api';
 import { MatTableModule } from '@angular/material/table';
 import { BooleanToHunPipe } from './shared/boolean-to-hun.pipe';
 import { ToastrModule } from 'ngx-toastr';
 import { RequestInterceptor } from './shared/request-interceptor';
 import { ConfirmationModalComponent } from './shared/confirmation-modal/confirmation-modal.component';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatSelectModule } from '@angular/material/select';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @NgModule({
   declarations: [
@@ -71,9 +77,12 @@ import { MatDialogModule } from '@angular/material/dialog';
     MatTableModule,
     ToastrModule.forRoot(),
     MatDialogModule,
+    MatSelectModule,
+    MatCheckboxModule,
   ],
   providers: [
     DevicesService,
+    UsersService,
     AuthenticationService,
     { provide: HTTP_INTERCEPTORS, useClass: RequestInterceptor, multi: true },
   ],

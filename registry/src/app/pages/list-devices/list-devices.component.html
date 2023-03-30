@@ -32,7 +32,9 @@
     </ng-container>
     <ng-container matColumnDef="userId">
       <th mat-header-cell *matHeaderCellDef>Felhasználói azonosító</th>
-      <td mat-cell *matCellDef="let element">{{ element.userId }}</td>
+      <td mat-cell *matCellDef="let element">
+        {{ getUserName(element.userId) }}
+      </td>
     </ng-container>
     <ng-container matColumnDef="isActive">
       <th mat-header-cell *matHeaderCellDef>Aktív</th>

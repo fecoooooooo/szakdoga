@@ -24,7 +24,10 @@ builder.Services.AddCors(options =>
 	});
 });
 
-builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<RegistryContext>();
+builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+	.AddEntityFrameworkStores<RegistryContext>();
+
+builder.Services.AddScoped<AspNetUserManager<IdentityUser>>();
 
 var app = builder.Build();
 

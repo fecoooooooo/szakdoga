@@ -2,7 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Device, DevicesService } from 'api-clients/api';
+import {
+  Device,
+  DevicesService,
+  IdentityUser,
+  UsersService,
+} from 'api-clients/api';
+import { forkJoin } from 'rxjs';
 import { ConfirmationModalComponent } from 'src/app/shared/confirmation-modal/confirmation-modal.component';
 
 @Component({
@@ -24,16 +30,23 @@ export class ListDevicesComponent implements OnInit {
   ];
   dataSource = new MatTableDataSource<Device>();
 
+  users: IdentityUser[] | null = null;
+
   constructor(
     private devicesService: DevicesService,
     private matDialog: MatDialog,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private usersService: UsersService
   ) {}
 
   ngOnInit(): void {
-    this.devicesService.apiDevicesAllDevicesGet().subscribe((r) => {
-      this.dataSource = new MatTableDataSource<Device>(r);
+    forkJoin({
+      devices: this.devicesService.apiDevicesAllDevicesGet(),
+      users: this.usersService.allUsersGet(),
+    }).subscribe((result) => {
+      this.dataSource = new MatTableDataSource<Device>(result.devices);
+      this.users = result.users;
     });
   }
 
@@ -58,5 +71,9 @@ export class ListDevicesComponent implements OnInit {
         });
       }
     });
+  }
+
+  getUserName(userId: string) {
+    return this.users?.find((x) => x.id === userId)?.userName;
   }
 }
