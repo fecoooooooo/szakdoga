@@ -9,6 +9,9 @@
       <mat-form-field class="col-12">
         <mat-label>Szériaszám</mat-label>
         <input matInput type="text" [formControl]="serialControl" />
+        <mat-error *ngIf="serialControl.errors?.['inUse']"
+          >Ez a szériaszám már létezik</mat-error
+        >
         <mat-error>Kötelező</mat-error>
       </mat-form-field>
 
@@ -27,7 +30,7 @@
       <mat-form-field class="col-12">
         <mat-label>Ár</mat-label>
         <input matInput type="number" [formControl]="priceControl" />
-        <mat-error>Kötelező</mat-error>
+        <mat-error>Kötelező és valid számnak kell lennie</mat-error>
       </mat-form-field>
 
       <mat-form-field class="col-12">

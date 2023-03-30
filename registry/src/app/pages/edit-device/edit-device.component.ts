@@ -8,6 +8,8 @@ import {
 import { ActivatedRoute, Router } from '@angular/router';
 import { DevicesService, IdentityUser, UsersService } from 'api-clients/api';
 import { Device } from 'api-clients/api/model/device';
+import { forkJoin } from 'rxjs';
+import { CommonValidators } from 'src/app/shared/common-validators';
 
 @Component({
   selector: 'app-edit-device',
@@ -31,6 +33,7 @@ export class EditDeviceComponent implements OnInit {
   isActiveControl: FormControl;
 
   users: IdentityUser[] | null = null;
+  inUseSerials: string[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -64,27 +67,50 @@ export class EditDeviceComponent implements OnInit {
 
   ngOnInit(): void {
     let id: string | null = this.route.snapshot.paramMap.get('id');
-
-    this.usersService.allUsersGet().subscribe((r) => {
-      this.users = r;
-    });
-
     this.isCreate = id === null;
-    if (id !== null) {
-      this.devicesService.apiDevicesSingleIdGet(+id).subscribe((r) => {
-        this.serialControl.setValue(r.serialNumber);
-        this.nameControl.setValue(r.name);
-        this.descriptionControl.setValue(r.description);
-        this.priceControl.setValue(r.price);
-        this.linkControl.setValue(r.link);
-        this.userIdControl.setValue(r.userId);
-        this.isActiveControl.setValue(r.isActive);
 
-        this.deviceDataRecieved = true;
+    forkJoin({
+      users: this.usersService.allUsersGet(),
+      softwares: this.devicesService.apiDevicesAllDevicesGet(),
+    }).subscribe((result) => {
+      this.users = result.users;
 
-        this.deviceId = +id!;
-      });
-    }
+      this.inUseSerials = result.softwares
+        .map((x) => x.serialNumber)
+        .filter((x) => x != null) as string[];
+
+      if (
+        id !== null ||
+        result.softwares.find((x) => (x.id = +id!)) !== undefined
+      ) {
+        let currentSoftware = result.softwares.find((x) => (x.id = +id!));
+
+        if (currentSoftware !== undefined) {
+          this.serialControl.setValue(currentSoftware.serialNumber);
+          this.nameControl.setValue(currentSoftware.name);
+          this.descriptionControl.setValue(currentSoftware.description);
+          this.priceControl.setValue(currentSoftware.price);
+          this.linkControl.setValue(currentSoftware.link);
+          this.userIdControl.setValue(currentSoftware.userId);
+          this.isActiveControl.setValue(currentSoftware.isActive);
+
+          this.deviceDataRecieved = true;
+
+          this.deviceId = +id!;
+
+          this.serialControl.addValidators(
+            CommonValidators.inUseKeyValidator(
+              this.inUseSerials,
+              currentSoftware.serialNumber
+            )
+          );
+        }
+      } else {
+        this.serialControl.addValidators(
+          CommonValidators.inUseKeyValidator(this.inUseSerials, null)
+        );
+      }
+    });
   }
 
   onSubmit() {
