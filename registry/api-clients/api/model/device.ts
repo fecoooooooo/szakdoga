@@ -7,7 +7,6 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { AspNetUser } from './aspNetUser';
 
 
 export interface Device { 
@@ -19,6 +18,5 @@ export interface Device {
     link?: string | null;
     userId?: string | null;
     isActive?: boolean;
-    user?: AspNetUser;
 }
 

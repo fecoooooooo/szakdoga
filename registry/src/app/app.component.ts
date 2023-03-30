@@ -1,6 +1,4 @@
 import { Component, ViewChild } from '@angular/core';
-import { MatSidenav } from '@angular/material/sidenav';
-import { AuthenticationService } from 'api-clients/api';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from './shared/auth.service';
 
@@ -25,5 +23,9 @@ export class AppComponent {
 
   showError() {
     this.toastr.error('Error message', 'Error!');
+  }
+
+  logout() {
+    this.authService.logout();
   }
 }

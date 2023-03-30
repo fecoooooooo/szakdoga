@@ -3,3 +3,16 @@ catch all backend exception
 	send stack trace 
 	send ex message
 authentication
+css
+devices:
+	list,
+	edit
+		user valaszto dropdown
+	delete
+	mod
+CORS
+proxy
+docker, kitelepites
+swagger generalas
+foreign key dolgok
+auto increment

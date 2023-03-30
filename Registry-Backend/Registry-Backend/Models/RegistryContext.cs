@@ -33,8 +33,6 @@ public partial class RegistryContext : DbContext
 
     public virtual DbSet<DeviceHistory> DeviceHistories { get; set; }
 
-    public virtual DbSet<Sample> Samples { get; set; }
-
     public virtual DbSet<Software> Softwares { get; set; }
 
     public virtual DbSet<SoftwareHistory> SoftwareHistories { get; set; }
@@ -134,10 +132,6 @@ public partial class RegistryContext : DbContext
             entity.Property(e => e.Price).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.SerialNumber).HasMaxLength(50);
             entity.Property(e => e.UserId).HasMaxLength(450);
-
-            entity.HasOne(d => d.User).WithMany(p => p.Devices)
-                .HasForeignKey(d => d.UserId)
-                .HasConstraintName("FK_Device_AspNetUsers");
         });
 
         modelBuilder.Entity<DeviceHistory>(entity =>
@@ -153,24 +147,6 @@ public partial class RegistryContext : DbContext
                 .HasConstraintName("FK_DeviceHistory_AspNetUsers");
         });
 
-        modelBuilder.Entity<Sample>(entity =>
-        {
-            entity
-                .HasNoKey()
-                .ToTable("Sample");
-
-            entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.Key)
-                .HasMaxLength(10)
-                .IsFixedLength()
-                .HasColumnName("key");
-            entity.Property(e => e.Name)
-                .HasMaxLength(10)
-                .IsFixedLength()
-                .HasColumnName("name");
-            entity.Property(e => e.Something).HasColumnName("something");
-        });
-
         modelBuilder.Entity<Software>(entity =>
         {
             entity.ToTable("Software");
@@ -184,10 +160,6 @@ public partial class RegistryContext : DbContext
             entity.Property(e => e.Price).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.ProductLink).HasMaxLength(250);
             entity.Property(e => e.UserId).HasMaxLength(450);
-
-            entity.HasOne(d => d.User).WithMany(p => p.Softwares)
-                .HasForeignKey(d => d.UserId)
-                .HasConstraintName("FK_Software_Software");
         });
 
         modelBuilder.Entity<SoftwareHistory>(entity =>
@@ -196,11 +168,6 @@ public partial class RegistryContext : DbContext
 
             entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.UserId).HasMaxLength(450);
-
-            entity.HasOne(d => d.Software).WithMany(p => p.SoftwareHistories)
-                .HasForeignKey(d => d.SoftwareId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_SoftwareHistory_Software");
 
             entity.HasOne(d => d.User).WithMany(p => p.SoftwareHistories)
                 .HasForeignKey(d => d.UserId)

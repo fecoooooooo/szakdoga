@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthenticationComponent } from './pages/authentication/authentication.component';
+import { EditDeviceComponent } from './pages/edit-device/edit-device.component';
+import { EditSoftwareComponent } from './pages/edit-software/edit-software.component';
 import { EditUserComponent } from './pages/edit-user/edit-user.component';
 import { ListDevicesComponent } from './pages/list-devices/list-devices.component';
 import { ListSoftwaresComponent } from './pages/list-softwares/list-softwares.component';
@@ -13,7 +15,7 @@ import { AuthGuard } from './shared/auth.guard';
 const routes: Routes = [
   { path: '', component: ListUsersComponent, canActivate: [AuthGuard] },
   {
-    path: 'list-users',
+    path: 'manage-users',
     children: [
       {
         path: '',
@@ -22,26 +24,58 @@ const routes: Routes = [
         canActivate: [AuthGuard],
       },
       {
-        path: 'new-user', // child route path
-        component: EditUserComponent, // child route component that the router renders
+        path: 'new-user',
+        component: EditUserComponent,
         canActivate: [AuthGuard],
       },
       {
-        path: 'edit-user/:id', // child route path
-        component: EditUserComponent, // child route component that the router renders
+        path: 'edit-user/:id',
+        component: EditUserComponent,
         canActivate: [AuthGuard],
       },
     ],
   },
   {
-    path: 'list-devices',
-    component: ListDevicesComponent,
-    canActivate: [AuthGuard],
+    path: 'manage-devices',
+    children: [
+      {
+        path: '',
+        component: ListDevicesComponent,
+        pathMatch: 'full',
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'new-device',
+        component: EditDeviceComponent,
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'edit-device/:id',
+        component: EditDeviceComponent,
+        canActivate: [AuthGuard],
+      },
+    ],
   },
   {
-    path: 'list-softwares',
-    component: ListSoftwaresComponent,
-    canActivate: [AuthGuard],
+    path: 'manage-softwares',
+    children: [
+      {
+        path: '',
+        component: ListSoftwaresComponent,
+        pathMatch: 'full',
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'new-software',
+        component: EditSoftwareComponent,
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'edit-software/:id',
+        component: EditSoftwareComponent,
+        canActivate: [AuthGuard],
+      },
+    ],
   },
   {
     path: 'user-devices',

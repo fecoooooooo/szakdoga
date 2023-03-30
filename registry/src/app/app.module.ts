@@ -32,6 +32,8 @@ import { MatTableModule } from '@angular/material/table';
 import { BooleanToHunPipe } from './shared/boolean-to-hun.pipe';
 import { ToastrModule } from 'ngx-toastr';
 import { RequestInterceptor } from './shared/request-interceptor';
+import { ConfirmationModalComponent } from './shared/confirmation-modal/confirmation-modal.component';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
   declarations: [
@@ -50,6 +52,7 @@ import { RequestInterceptor } from './shared/request-interceptor';
     NotFoundComponent,
     AuthenticationComponent,
     BooleanToHunPipe,
+    ConfirmationModalComponent,
   ],
   imports: [
     BrowserModule,
@@ -67,6 +70,7 @@ import { RequestInterceptor } from './shared/request-interceptor';
     MatInputModule,
     MatTableModule,
     ToastrModule.forRoot(),
+    MatDialogModule,
   ],
   providers: [
     DevicesService,

@@ -5,7 +5,7 @@
     "version": "1.0"
   },
   "paths": {
-    "/api/Authentication/GenerateSwaggerJson": {
+    "/api/Authentication/DEBUG_GenerateSwaggerJson": {
       "get": {
         "tags": [
           "Authentication"
@@ -43,7 +43,7 @@
         }
       }
     },
-    "/api/Authentication/Example400": {
+    "/api/Authentication/DEBUG_Example400": {
       "get": {
         "tags": [
           "Authentication"
@@ -55,7 +55,7 @@
         }
       }
     },
-    "/api/Authentication/Example500": {
+    "/api/Authentication/DEBUG_Example500": {
       "get": {
         "tags": [
           "Authentication"
@@ -105,7 +105,7 @@
         }
       }
     },
-    "/api/Devices/Device/{id}": {
+    "/api/Devices/Single/{id}": {
       "get": {
         "tags": [
           "Devices"
@@ -145,275 +145,147 @@
           }
         }
       }
+    },
+    "/api/Devices/Delete/{id}": {
+      "delete": {
+        "tags": [
+          "Devices"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Devices/UpdateDevice": {
+      "patch": {
+        "tags": [
+          "Devices"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Device"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Device"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Device"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Devices/AddDevice": {
+      "post": {
+        "tags": [
+          "Devices"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Device"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Device"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Device"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
     "schemas": {
-      "AspNetRole": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "nullable": true
-          },
-          "name": {
-            "type": "string",
-            "nullable": true
-          },
-          "normalizedName": {
-            "type": "string",
-            "nullable": true
-          },
-          "concurrencyStamp": {
-            "type": "string",
-            "nullable": true
-          },
-          "aspNetRoleClaims": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/AspNetRoleClaim"
-            },
-            "nullable": true,
-            "readOnly": true
-          },
-          "users": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/AspNetUser"
-            },
-            "nullable": true,
-            "readOnly": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "AspNetRoleClaim": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "roleId": {
-            "type": "string",
-            "nullable": true
-          },
-          "claimType": {
-            "type": "string",
-            "nullable": true
-          },
-          "claimValue": {
-            "type": "string",
-            "nullable": true
-          },
-          "role": {
-            "$ref": "#/components/schemas/AspNetRole"
-          }
-        },
-        "additionalProperties": false
-      },
-      "AspNetUser": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "nullable": true
-          },
-          "userName": {
-            "type": "string",
-            "nullable": true
-          },
-          "normalizedUserName": {
-            "type": "string",
-            "nullable": true
-          },
-          "email": {
-            "type": "string",
-            "nullable": true
-          },
-          "normalizedEmail": {
-            "type": "string",
-            "nullable": true
-          },
-          "emailConfirmed": {
-            "type": "boolean"
-          },
-          "passwordHash": {
-            "type": "string",
-            "nullable": true
-          },
-          "securityStamp": {
-            "type": "string",
-            "nullable": true
-          },
-          "concurrencyStamp": {
-            "type": "string",
-            "nullable": true
-          },
-          "phoneNumber": {
-            "type": "string",
-            "nullable": true
-          },
-          "phoneNumberConfirmed": {
-            "type": "boolean"
-          },
-          "twoFactorEnabled": {
-            "type": "boolean"
-          },
-          "lockoutEnd": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          },
-          "lockoutEnabled": {
-            "type": "boolean"
-          },
-          "accessFailedCount": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "aspNetUserClaims": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/AspNetUserClaim"
-            },
-            "nullable": true,
-            "readOnly": true
-          },
-          "aspNetUserLogins": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/AspNetUserLogin"
-            },
-            "nullable": true,
-            "readOnly": true
-          },
-          "aspNetUserTokens": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/AspNetUserToken"
-            },
-            "nullable": true,
-            "readOnly": true
-          },
-          "deviceHistories": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/DeviceHistory"
-            },
-            "nullable": true,
-            "readOnly": true
-          },
-          "devices": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Device"
-            },
-            "nullable": true,
-            "readOnly": true
-          },
-          "softwareHistories": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/SoftwareHistory"
-            },
-            "nullable": true,
-            "readOnly": true
-          },
-          "softwares": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Software"
-            },
-            "nullable": true,
-            "readOnly": true
-          },
-          "roles": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/AspNetRole"
-            },
-            "nullable": true,
-            "readOnly": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "AspNetUserClaim": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "userId": {
-            "type": "string",
-            "nullable": true
-          },
-          "claimType": {
-            "type": "string",
-            "nullable": true
-          },
-          "claimValue": {
-            "type": "string",
-            "nullable": true
-          },
-          "user": {
-            "$ref": "#/components/schemas/AspNetUser"
-          }
-        },
-        "additionalProperties": false
-      },
-      "AspNetUserLogin": {
-        "type": "object",
-        "properties": {
-          "loginProvider": {
-            "type": "string",
-            "nullable": true
-          },
-          "providerKey": {
-            "type": "string",
-            "nullable": true
-          },
-          "providerDisplayName": {
-            "type": "string",
-            "nullable": true
-          },
-          "userId": {
-            "type": "string",
-            "nullable": true
-          },
-          "user": {
-            "$ref": "#/components/schemas/AspNetUser"
-          }
-        },
-        "additionalProperties": false
-      },
-      "AspNetUserToken": {
-        "type": "object",
-        "properties": {
-          "userId": {
-            "type": "string",
-            "nullable": true
-          },
-          "loginProvider": {
-            "type": "string",
-            "nullable": true
-          },
-          "name": {
-            "type": "string",
-            "nullable": true
-          },
-          "value": {
-            "type": "string",
-            "nullable": true
-          },
-          "user": {
-            "$ref": "#/components/schemas/AspNetUser"
-          }
-        },
-        "additionalProperties": false
-      },
       "Device": {
         "type": "object",
         "properties": {
@@ -447,39 +319,6 @@
           },
           "isActive": {
             "type": "boolean"
-          },
-          "user": {
-            "$ref": "#/components/schemas/AspNetUser"
-          }
-        },
-        "additionalProperties": false
-      },
-      "DeviceHistory": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "userId": {
-            "type": "string",
-            "nullable": true
-          },
-          "deviceId": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "startDate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "endDate": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          },
-          "user": {
-            "$ref": "#/components/schemas/AspNetUser"
           }
         },
         "additionalProperties": false
@@ -503,87 +342,6 @@
             "type": "integer",
             "format": "int64",
             "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "Software": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "license": {
-            "type": "string",
-            "nullable": true
-          },
-          "name": {
-            "type": "string",
-            "nullable": true
-          },
-          "description": {
-            "type": "string",
-            "nullable": true
-          },
-          "price": {
-            "type": "number",
-            "format": "double"
-          },
-          "productLink": {
-            "type": "string",
-            "nullable": true
-          },
-          "userId": {
-            "type": "string",
-            "nullable": true
-          },
-          "isActive": {
-            "type": "boolean"
-          },
-          "softwareHistories": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/SoftwareHistory"
-            },
-            "nullable": true,
-            "readOnly": true
-          },
-          "user": {
-            "$ref": "#/components/schemas/AspNetUser"
-          }
-        },
-        "additionalProperties": false
-      },
-      "SoftwareHistory": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "userId": {
-            "type": "string",
-            "nullable": true
-          },
-          "softwareId": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "startDate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "endDate": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          },
-          "software": {
-            "$ref": "#/components/schemas/Software"
-          },
-          "user": {
-            "$ref": "#/components/schemas/AspNetUser"
           }
         },
         "additionalProperties": false

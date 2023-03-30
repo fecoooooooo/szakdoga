@@ -15,7 +15,5 @@ public partial class SoftwareHistory
 
     public DateTime? EndDate { get; set; }
 
-    public virtual Software Software { get; set; } = null!;
-
     public virtual AspNetUser User { get; set; } = null!;
 }

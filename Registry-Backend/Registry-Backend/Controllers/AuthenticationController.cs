@@ -15,7 +15,7 @@ namespace Registry_Backend.Controllers
 			this.dbContext = dbContext;
 		}
 
-		[HttpGet("GenerateSwaggerJson")]
+		[HttpGet("DEBUG_GenerateSwaggerJson")]
 		[ProducesResponseType(typeof(List<Sample>), StatusCodes.Status200OK)]
 		public IActionResult GetSamples()
 		{
@@ -27,13 +27,13 @@ namespace Registry_Backend.Controllers
 			return Ok("OK");
 		}
 
-		[HttpGet("Example400")]
+		[HttpGet("DEBUG_Example400")]
 		public IActionResult Example400()
 		{
 			return BadRequest("400");
 		}
 
-		[HttpGet("Example500")]
+		[HttpGet("DEBUG_Example500")]
 		public IActionResult Example500()
 		{
 			throw new Exception("500");

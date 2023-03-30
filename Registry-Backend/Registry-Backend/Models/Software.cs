@@ -20,8 +20,4 @@ public partial class Software
     public string? UserId { get; set; }
 
     public bool IsActive { get; set; }
-
-    public virtual ICollection<SoftwareHistory> SoftwareHistories { get; } = new List<SoftwareHistory>();
-
-    public virtual AspNetUser? User { get; set; }
 }

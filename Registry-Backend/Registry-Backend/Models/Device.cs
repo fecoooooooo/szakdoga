@@ -20,6 +20,4 @@ public partial class Device
     public string? UserId { get; set; }
 
     public bool IsActive { get; set; }
-
-    public virtual AspNetUser? User { get; set; }
 }

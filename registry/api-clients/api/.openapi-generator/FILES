@@ -8,17 +8,8 @@ configuration.ts
 encoder.ts
 git_push.sh
 index.ts
-model/aspNetRole.ts
-model/aspNetRoleClaim.ts
-model/aspNetUser.ts
-model/aspNetUserClaim.ts
-model/aspNetUserLogin.ts
-model/aspNetUserToken.ts
 model/device.ts
-model/deviceHistory.ts
 model/models.ts
 model/sample.ts
-model/software.ts
-model/softwareHistory.ts
 param.ts
 variables.ts

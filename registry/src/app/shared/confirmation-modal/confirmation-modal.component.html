@@ -1,0 +1,27 @@
+<!--div class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>Művelet megerősítése</h2>
+    </div>
+    <div class="modal-body">
+      <p>Biztosan végrehajtja?</p>
+    </div>
+    <div class="modal-footer">
+      <button mat-raised-button (click)="onCancel()">Mégse</button>
+      <button mat-raised-button (click)="onConfirm()" color="primary">
+        Megerősít
+      </button>
+    </div>
+  </div>
+</div-->
+
+<h1 mat-dialog-title>Művelet megerősítése</h1>
+<div mat-dialog-content>
+  <p>Biztosan végrehajtja?</p>
+</div>
+<div mat-dialog-actions class="actions-container">
+  <button mat-raised-button mat-dialog-close>Mégsem</button>
+  <button mat-raised-button color="primary" [mat-dialog-close]="true">
+    Megerősít
+  </button>
+</div>
