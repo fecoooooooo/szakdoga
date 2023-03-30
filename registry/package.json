@@ -8,7 +8,7 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "gen-api": "java -jar openapi-generator-cli/openapi-generator-cli.jar generate -t openapi-generator-cli/template -i swagger/swagger.json -g typescript-angular -o api-clients/api"
+    "gen-api": "java -jar openapi-generator-cli/openapi-generator-cli.jar generate -t openapi-generator-cli/template -i swagger/swagger.json -g typescript-angular -o api-clients/api && cd api-clients/api/api && replacer.bat"
   },
   "private": true,
   "dependencies": {

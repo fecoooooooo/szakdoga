@@ -1,1 +1,74 @@
-<p>edit-software works!</p>
+<div class="container">
+  <button mat-raised-button class="mb-5" (click)="cancel()">Vissza</button>
+
+  <div class="row">
+    <form
+      [formGroup]="form"
+      *ngIf="isCreate || (!isCreate && softwerDataRecieved)"
+    >
+      <mat-form-field class="col-12">
+        <mat-label>Licensz</mat-label>
+        <input matInput type="text" [formControl]="licenseControl" />
+        <mat-error>Kötelező</mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="col-12">
+        <mat-label>Név</mat-label>
+        <input matInput type="text" [formControl]="nameControl" />
+        <mat-error>Kötelező</mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="col-12">
+        <mat-label>Leírás</mat-label>
+        <input matInput type="text" [formControl]="descriptionControl" />
+        <mat-error>Kötelező</mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="col-12">
+        <mat-label>Ár</mat-label>
+        <input matInput type="number" [formControl]="priceControl" />
+        <mat-error>Kötelező</mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="col-12">
+        <mat-label>Link</mat-label>
+        <input matInput type="text" [formControl]="productLinkControl" />
+        <mat-error>Kötelező</mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="col-12">
+        <mat-label>Felhasználó</mat-label>
+        <mat-select matInput [formControl]="userIdControl">
+          <mat-option *ngFor="let u of users" [value]="u.id">
+            {{ u.userName }}
+          </mat-option>
+        </mat-select>
+        <button
+          *ngIf="!userIdControl.disabled && userIdControl.value"
+          matPrefix
+          mat-icon-button
+          aria-label="Clear"
+          (click)="userIdControl.reset()"
+        >
+          <mat-icon>close</mat-icon>
+        </button>
+        <mat-error>Kötelező</mat-error>
+      </mat-form-field>
+
+      <div class="col-12">
+        <mat-checkbox [formControl]="isActiveControl">Aktív</mat-checkbox>
+      </div>
+
+      <div class="col-12">
+        <button
+          mat-raised-button
+          color="primary"
+          class="mt-2 text-right"
+          (click)="onSubmit()"
+        >
+          Mentés
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

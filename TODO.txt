@@ -11,10 +11,11 @@ devices:
 	delete
 	mod
 CORS
-proxy
+//proxy --> replacer
 docker, kitelepites
 swagger generalas
 foreign key dolgok
 auto increment
 bg color selected menu item
 azonosito helyett felhasznalo nev midnenhol
+unique serial, license check validator

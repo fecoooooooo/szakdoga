@@ -17,7 +17,7 @@ import { CustomHttpParameterCodec }                          from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 // @ts-ignore
-import { Device } from '../model/device';
+import { Software } from '../model/software';
 
 // @ts-ignore
 import { BASE_PATH, LOADER_TYPE_TOKEN, COLLECTION_FORMATS }                     from '../variables';
@@ -29,7 +29,7 @@ import { Configuration }                                     from '../configurat
 @Injectable({
   providedIn: 'root'
 })
-export class DevicesService {
+export class SoftwaresService {
 
     protected basePath = 'https://localhost:44301';
     public defaultHeaders = new HttpHeaders();
@@ -99,15 +99,15 @@ export class DevicesService {
     }
 
     /**
-     * @param device 
+     * @param software 
      * @param loaderType modify the httpContext->loaderTypeToken value
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public apiDevicesAddDevicePost(device?: Device, loaderType?: 'info' | 'lock' | 'default', observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<string>;
-    public apiDevicesAddDevicePost(device?: Device, loaderType?: 'info' | 'lock' | 'default', observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpResponse<string>>;
-    public apiDevicesAddDevicePost(device?: Device, loaderType?: 'info' | 'lock' | 'default', observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpEvent<string>>;
-    public apiDevicesAddDevicePost(device?: Device, loaderType?: 'info' | 'lock' | 'default', observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<any> {
+    public apiSoftwaresAddSoftwarePost(software?: Software, loaderType?: 'info' | 'lock' | 'default', observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<string>;
+    public apiSoftwaresAddSoftwarePost(software?: Software, loaderType?: 'info' | 'lock' | 'default', observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpResponse<string>>;
+    public apiSoftwaresAddSoftwarePost(software?: Software, loaderType?: 'info' | 'lock' | 'default', observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpEvent<string>>;
+    public apiSoftwaresAddSoftwarePost(software?: Software, loaderType?: 'info' | 'lock' | 'default', observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<any> {
         let lvHeaders = this.defaultHeaders;
         let lvHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
         if (lvHttpHeaderAcceptSelected === undefined) {
@@ -151,11 +151,11 @@ export class DevicesService {
                 responseType_ = 'blob';
             }
         }
-        let lvPath = `/api/Devices/AddDevice`;
+        let lvPath = `/api/Softwares/AddSoftware`;
         return this.httpClient.request<string>('post', `${this.configuration.basePath}${lvPath}`,
             {
                 context: lvHttpContext,
-                body: device,
+                body: software,
                 responseType: <any>responseType_,
                 headers: lvHeaders,
                 observe: observe,
@@ -169,10 +169,10 @@ export class DevicesService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public apiDevicesAllDevicesGet(loaderType?: 'info' | 'lock' | 'default', observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<Array<Device>>;
-    public apiDevicesAllDevicesGet(loaderType?: 'info' | 'lock' | 'default', observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpResponse<Array<Device>>>;
-    public apiDevicesAllDevicesGet(loaderType?: 'info' | 'lock' | 'default', observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpEvent<Array<Device>>>;
-    public apiDevicesAllDevicesGet(loaderType?: 'info' | 'lock' | 'default', observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<any> {
+    public apiSoftwaresAllSoftwaresGet(loaderType?: 'info' | 'lock' | 'default', observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<Array<Software>>;
+    public apiSoftwaresAllSoftwaresGet(loaderType?: 'info' | 'lock' | 'default', observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpResponse<Array<Software>>>;
+    public apiSoftwaresAllSoftwaresGet(loaderType?: 'info' | 'lock' | 'default', observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpEvent<Array<Software>>>;
+    public apiSoftwaresAllSoftwaresGet(loaderType?: 'info' | 'lock' | 'default', observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<any> {
         let lvHeaders = this.defaultHeaders;
         let lvHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
         if (lvHttpHeaderAcceptSelected === undefined) {
@@ -205,8 +205,8 @@ export class DevicesService {
                 responseType_ = 'blob';
             }
         }
-        let lvPath = `/api/Devices/AllDevices`;
-        return this.httpClient.request<Array<Device>>('get', `${this.configuration.basePath}${lvPath}`,
+        let lvPath = `/api/Softwares/AllSoftwares`;
+        return this.httpClient.request<Array<Software>>('get', `${this.configuration.basePath}${lvPath}`,
             {
                 context: lvHttpContext,
                 responseType: <any>responseType_,
@@ -223,12 +223,12 @@ export class DevicesService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public apiDevicesDeleteIdDelete(id: number, loaderType?: 'info' | 'lock' | 'default', observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<string>;
-    public apiDevicesDeleteIdDelete(id: number, loaderType?: 'info' | 'lock' | 'default', observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpResponse<string>>;
-    public apiDevicesDeleteIdDelete(id: number, loaderType?: 'info' | 'lock' | 'default', observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpEvent<string>>;
-    public apiDevicesDeleteIdDelete(id: number, loaderType?: 'info' | 'lock' | 'default', observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<any> {
+    public apiSoftwaresDeleteIdDelete(id: number, loaderType?: 'info' | 'lock' | 'default', observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<string>;
+    public apiSoftwaresDeleteIdDelete(id: number, loaderType?: 'info' | 'lock' | 'default', observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpResponse<string>>;
+    public apiSoftwaresDeleteIdDelete(id: number, loaderType?: 'info' | 'lock' | 'default', observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpEvent<string>>;
+    public apiSoftwaresDeleteIdDelete(id: number, loaderType?: 'info' | 'lock' | 'default', observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<any> {
         if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling apiDevicesDeleteIdDelete.');
+            throw new Error('Required parameter id was null or undefined when calling apiSoftwaresDeleteIdDelete.');
         }
         let lvHeaders = this.defaultHeaders;
         let lvHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
@@ -262,7 +262,7 @@ export class DevicesService {
                 responseType_ = 'blob';
             }
         }
-        let lvPath = `/api/Devices/Delete/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int32"})}`;
+        let lvPath = `/api/Softwares/Delete/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int32"})}`;
         return this.httpClient.request<string>('delete', `${this.configuration.basePath}${lvPath}`,
             {
                 context: lvHttpContext,
@@ -280,12 +280,12 @@ export class DevicesService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public apiDevicesSingleIdGet(id: number, loaderType?: 'info' | 'lock' | 'default', observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<Device>;
-    public apiDevicesSingleIdGet(id: number, loaderType?: 'info' | 'lock' | 'default', observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpResponse<Device>>;
-    public apiDevicesSingleIdGet(id: number, loaderType?: 'info' | 'lock' | 'default', observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpEvent<Device>>;
-    public apiDevicesSingleIdGet(id: number, loaderType?: 'info' | 'lock' | 'default', observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<any> {
+    public apiSoftwaresSingleIdGet(id: number, loaderType?: 'info' | 'lock' | 'default', observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<Software>;
+    public apiSoftwaresSingleIdGet(id: number, loaderType?: 'info' | 'lock' | 'default', observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpResponse<Software>>;
+    public apiSoftwaresSingleIdGet(id: number, loaderType?: 'info' | 'lock' | 'default', observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpEvent<Software>>;
+    public apiSoftwaresSingleIdGet(id: number, loaderType?: 'info' | 'lock' | 'default', observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<any> {
         if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling apiDevicesSingleIdGet.');
+            throw new Error('Required parameter id was null or undefined when calling apiSoftwaresSingleIdGet.');
         }
         let lvHeaders = this.defaultHeaders;
         let lvHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
@@ -319,8 +319,8 @@ export class DevicesService {
                 responseType_ = 'blob';
             }
         }
-        let lvPath = `/api/Devices/Single/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int32"})}`;
-        return this.httpClient.request<Device>('get', `${this.configuration.basePath}${lvPath}`,
+        let lvPath = `/api/Softwares/Single/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int32"})}`;
+        return this.httpClient.request<Software>('get', `${this.configuration.basePath}${lvPath}`,
             {
                 context: lvHttpContext,
                 responseType: <any>responseType_,
@@ -332,15 +332,15 @@ export class DevicesService {
     }
 
     /**
-     * @param device 
+     * @param software 
      * @param loaderType modify the httpContext->loaderTypeToken value
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public apiDevicesUpdateDevicePatch(device?: Device, loaderType?: 'info' | 'lock' | 'default', observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<string>;
-    public apiDevicesUpdateDevicePatch(device?: Device, loaderType?: 'info' | 'lock' | 'default', observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpResponse<string>>;
-    public apiDevicesUpdateDevicePatch(device?: Device, loaderType?: 'info' | 'lock' | 'default', observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpEvent<string>>;
-    public apiDevicesUpdateDevicePatch(device?: Device, loaderType?: 'info' | 'lock' | 'default', observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<any> {
+    public apiSoftwaresUpdateSoftwarePatch(software?: Software, loaderType?: 'info' | 'lock' | 'default', observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<string>;
+    public apiSoftwaresUpdateSoftwarePatch(software?: Software, loaderType?: 'info' | 'lock' | 'default', observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpResponse<string>>;
+    public apiSoftwaresUpdateSoftwarePatch(software?: Software, loaderType?: 'info' | 'lock' | 'default', observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpEvent<string>>;
+    public apiSoftwaresUpdateSoftwarePatch(software?: Software, loaderType?: 'info' | 'lock' | 'default', observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<any> {
         let lvHeaders = this.defaultHeaders;
         let lvHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
         if (lvHttpHeaderAcceptSelected === undefined) {
@@ -384,11 +384,11 @@ export class DevicesService {
                 responseType_ = 'blob';
             }
         }
-        let lvPath = `/api/Devices/UpdateDevice`;
+        let lvPath = `/api/Softwares/UpdateSoftware`;
         return this.httpClient.request<string>('patch', `${this.configuration.basePath}${lvPath}`,
             {
                 context: lvHttpContext,
-                body: device,
+                body: software,
                 responseType: <any>responseType_,
                 headers: lvHeaders,
                 observe: observe,

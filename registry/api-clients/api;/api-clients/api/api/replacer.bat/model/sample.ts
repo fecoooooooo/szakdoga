@@ -9,14 +9,10 @@
  */
 
 
-export interface Software { 
+export interface Sample { 
     id?: number;
-    license?: string | null;
+    key?: string | null;
     name?: string | null;
-    description?: string | null;
-    price?: number;
-    productLink?: string | null;
-    userId?: string | null;
-    isActive?: boolean;
+    something?: number | null;
 }
 

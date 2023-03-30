@@ -9,13 +9,13 @@
  */
 
 
-export interface Software { 
+export interface Device { 
     id?: number;
-    license?: string | null;
+    serialNumber?: string | null;
     name?: string | null;
     description?: string | null;
     price?: number;
-    productLink?: string | null;
+    link?: string | null;
     userId?: string | null;
     isActive?: boolean;
 }
