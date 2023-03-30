@@ -12,6 +12,8 @@ import {
   SoftwaresService,
   UsersService,
 } from 'api-clients/api';
+import { forkJoin } from 'rxjs';
+import { CommonValidators } from 'src/app/shared/common-validators';
 
 @Component({
   selector: 'app-edit-software',
@@ -35,6 +37,7 @@ export class EditSoftwareComponent {
   isActiveControl: FormControl;
 
   users: IdentityUser[] | null = null;
+  inUseLicenses: string[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -68,27 +71,50 @@ export class EditSoftwareComponent {
 
   ngOnInit(): void {
     let id: string | null = this.route.snapshot.paramMap.get('id');
-
-    this.usersService.allUsersGet().subscribe((r) => {
-      this.users = r;
-    });
-
     this.isCreate = id === null;
-    if (id !== null) {
-      this.softwaresService.apiSoftwaresSingleIdGet(+id).subscribe((r) => {
-        this.licenseControl.setValue(r.license);
-        this.nameControl.setValue(r.name);
-        this.descriptionControl.setValue(r.description);
-        this.priceControl.setValue(r.price);
-        this.productLinkControl.setValue(r.productLink);
-        this.userIdControl.setValue(r.userId);
-        this.isActiveControl.setValue(r.isActive);
 
-        this.softwerDataRecieved = true;
+    forkJoin({
+      users: this.usersService.allUsersGet(),
+      softwares: this.softwaresService.apiSoftwaresAllSoftwaresGet(),
+    }).subscribe((result) => {
+      this.users = result.users;
 
-        this.softwareId = +id!;
-      });
-    }
+      this.inUseLicenses = result.softwares
+        .map((x) => x.license)
+        .filter((x) => x != null) as string[];
+
+      if (
+        id !== null ||
+        result.softwares.find((x) => (x.id = +id!)) !== undefined
+      ) {
+        let currentSoftware = result.softwares.find((x) => (x.id = +id!));
+
+        if (currentSoftware !== undefined) {
+          this.licenseControl.setValue(currentSoftware.license);
+          this.nameControl.setValue(currentSoftware.name);
+          this.descriptionControl.setValue(currentSoftware.description);
+          this.priceControl.setValue(currentSoftware.price);
+          this.productLinkControl.setValue(currentSoftware.productLink);
+          this.userIdControl.setValue(currentSoftware.userId);
+          this.isActiveControl.setValue(currentSoftware.isActive);
+
+          this.softwerDataRecieved = true;
+
+          this.softwareId = +id!;
+
+          this.licenseControl.addValidators(
+            CommonValidators.inUseKeyValidator(
+              this.inUseLicenses,
+              currentSoftware.license
+            )
+          );
+        }
+      } else {
+        this.licenseControl.addValidators(
+          CommonValidators.inUseKeyValidator(this.inUseLicenses, null)
+        );
+      }
+    });
   }
 
   onSubmit() {

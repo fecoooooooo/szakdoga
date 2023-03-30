@@ -5,7 +5,6 @@ import {
   HttpHandler,
   HttpEvent,
   HttpResponse,
-  HttpErrorResponse,
 } from '@angular/common/http';
 import { catchError, Observable, tap, throwError } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
@@ -20,8 +19,6 @@ export class RequestInterceptor implements HttpInterceptor {
   ): Observable<HttpEvent<any>> {
     return next.handle(req).pipe(
       tap((e) => {
-        console.log(req.method);
-
         if (e instanceof HttpResponse) {
           if (
             req.method === 'PATCH' ||
@@ -29,7 +26,6 @@ export class RequestInterceptor implements HttpInterceptor {
             req.method === 'POST' ||
             req.method === 'DELETE'
           ) {
-            console.log(req.method);
             this.toastrService.success('', 'Sikeres művelet');
           }
         }
