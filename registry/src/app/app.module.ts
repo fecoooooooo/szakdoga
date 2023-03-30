@@ -1,4 +1,4 @@
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
@@ -27,9 +27,11 @@ import { AuthenticationComponent } from './pages/authentication/authentication.c
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { DevicesService } from 'api-clients/api';
+import { AuthenticationService, DevicesService } from 'api-clients/api';
 import { MatTableModule } from '@angular/material/table';
-import { BooleanToHunPipe } from './pipes/boolean-to-hun.pipe';
+import { BooleanToHunPipe } from './shared/boolean-to-hun.pipe';
+import { ToastrModule } from 'ngx-toastr';
+import { RequestInterceptor } from './shared/request-interceptor';
 
 @NgModule({
   declarations: [
@@ -64,8 +66,13 @@ import { BooleanToHunPipe } from './pipes/boolean-to-hun.pipe';
     MatFormFieldModule,
     MatInputModule,
     MatTableModule,
+    ToastrModule.forRoot(),
   ],
-  providers: [DevicesService],
+  providers: [
+    DevicesService,
+    AuthenticationService,
+    { provide: HTTP_INTERCEPTORS, useClass: RequestInterceptor, multi: true },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

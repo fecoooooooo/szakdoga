@@ -1,0 +1,5 @@
+catch all backend exception
+	status code 500
+	send stack trace 
+	send ex message
+authentication

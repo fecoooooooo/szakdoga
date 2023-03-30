@@ -26,5 +26,17 @@ namespace Registry_Backend.Controllers
 
 			return Ok("OK");
 		}
+
+		[HttpGet("Example400")]
+		public IActionResult Example400()
+		{
+			return BadRequest("400");
+		}
+
+		[HttpGet("Example500")]
+		public IActionResult Example500()
+		{
+			throw new Exception("500");
+		}
 	}
 }

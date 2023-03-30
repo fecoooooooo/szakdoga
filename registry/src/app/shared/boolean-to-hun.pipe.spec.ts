@@ -1,4 +1,4 @@
-import { BooleanToHunPipe } from './boolean-to-hun.pipe';
+import { BooleanToHunPipe } from '../shared/boolean-to-hun.pipe';
 
 describe('BooleanToHunPipe', () => {
   it('create an instance', () => {
