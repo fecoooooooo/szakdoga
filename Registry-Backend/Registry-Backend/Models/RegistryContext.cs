@@ -125,7 +125,6 @@ public partial class RegistryContext : DbContext
 
             entity.HasIndex(e => e.SerialNumber, "IX_Device").IsUnique();
 
-            entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.Description).HasMaxLength(250);
             entity.Property(e => e.Link).HasMaxLength(250);
             entity.Property(e => e.Name).HasMaxLength(250);
@@ -147,7 +146,6 @@ public partial class RegistryContext : DbContext
 
             entity.HasIndex(e => e.License, "IX_Software").IsUnique();
 
-            entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.Description).HasMaxLength(250);
             entity.Property(e => e.License).HasMaxLength(50);
             entity.Property(e => e.Name).HasMaxLength(250);

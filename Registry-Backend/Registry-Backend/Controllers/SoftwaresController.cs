@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Registry_Backend.DTO;
 using Registry_Backend.Models;
 using System.Net;
 
@@ -83,10 +84,106 @@ namespace Registry_Backend.Controllers
 		[ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
 		public IActionResult AddSoftware([FromBody] Software software)
 		{
-			int maxId = dbContext.Softwares.Max(x => x.Id);
-
-			software.Id = maxId + 1;
 			dbContext.Softwares.Add(software);
+			dbContext.SaveChanges();
+
+			return Ok("OK");
+		}
+
+
+		[HttpGet("HistoryForSoftware/{id}")]
+		[ProducesResponseType(typeof(List<SoftwareHistory>), StatusCodes.Status200OK)]
+		public IActionResult GetHistoryForSoftwareById([FromRoute] int id)
+		{
+			var histories = dbContext.SoftwareHistories
+				.Where(x => x.SoftwareId == id)
+				.OrderBy(x => x.StartDate).ToList();
+
+			if (histories != null)
+				return Ok(histories);
+
+			return NotFound($"No software with id: {id}");
+		}
+
+		[HttpGet("SoftwaresForUser/{id}")]
+		[ProducesResponseType(typeof(List<SoftwaresForUserResponse>), StatusCodes.Status200OK)]
+		public IActionResult GetHistoryForUserById([FromRoute] string id)
+		{
+			var histories = dbContext.SoftwareHistories
+				.Where(x => x.UserId == id)
+				.Where(x => x.EndDate == null).ToList();
+
+			var user = dbContext.AspNetUsers.Where(x => x.Id == id).FirstOrDefault();
+			if (user == null)
+				return NotFound($"No user with id: {id}");
+
+			List<SoftwaresForUserResponse> response = new List<SoftwaresForUserResponse>();
+			if (histories != null)
+			{
+				foreach (var h in histories)
+				{
+					response.Add(new SoftwaresForUserResponse()
+					{
+						Name = dbContext.Softwares.Where(x => x.Id == h.SoftwareId).FirstOrDefault()?.Name,
+						StartDate = h.StartDate
+					});
+				}
+			}
+			return Ok(response);
+		}
+
+		[HttpPost("AddHistoryEntry")]
+		[ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+		public IActionResult AddHistoryEntry([FromQuery] int softwareId, [FromQuery] string userId, [FromQuery] bool startAssignment)
+		{
+			var software = dbContext.Softwares.Where(x => x.Id == softwareId).FirstOrDefault();
+			if (software == null)
+				return NotFound($"No software with id: {softwareId}");
+
+			var user = dbContext.AspNetUsers.Where(x => x.Id == userId);
+			if (user == null)
+				return NotFound($"No user with id: {userId}");
+
+			var allHistory = dbContext.SoftwareHistories.ToList();
+
+			var currentyHistory = dbContext.SoftwareHistories
+				.Where(x => x.EndDate == null)
+				.Where(x => x.SoftwareId == softwareId).FirstOrDefault();
+
+			if (startAssignment)
+			{
+				if (currentyHistory != null)
+				{
+					bool alreadyAssignedToThisUser = currentyHistory.UserId == userId;
+					if (alreadyAssignedToThisUser)
+						return Ok("Nothing to do, already assigned");
+
+					bool assignedToSomeoneElse = currentyHistory.UserId != userId;
+					if (assignedToSomeoneElse)
+					{
+						currentyHistory.EndDate = DateTime.Now;
+						dbContext.SoftwareHistories.Update(currentyHistory);
+					}
+
+				}
+				dbContext.SoftwareHistories.Add(new SoftwareHistory()
+				{
+					SoftwareId = softwareId,
+					UserId = userId,
+					StartDate = DateTime.Now
+				});
+			}
+			else
+			{
+				if (currentyHistory == null)
+					throw new Exception("Not assigned to user, can't terminate");
+				else
+				{
+					currentyHistory.EndDate = DateTime.Now;
+					dbContext.SoftwareHistories.Update(currentyHistory);
+				}
+			}
+
 			dbContext.SaveChanges();
 
 			return Ok("OK");

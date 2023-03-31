@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Registry_Backend.DTO;
 using Registry_Backend.Models;
 using System.Net;
 
@@ -82,36 +83,106 @@ namespace Registry_Backend.Controllers
 		[ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
 		public IActionResult AddDevice([FromBody] Device device)
 		{
-			int maxId = dbContext.Devices.Max(x => x.Id);
-
-			device.Id = maxId + 1;
 			dbContext.Devices.Add(device);
 			dbContext.SaveChanges();
 
 			return Ok("OK");
 		}
 
+
+		[HttpGet("HistoryForDevice/{id}")]
+		[ProducesResponseType(typeof(List<DeviceHistory>), StatusCodes.Status200OK)]
+		public IActionResult GetHistoryForDeviceById([FromRoute] int id)
+		{
+			var histories = dbContext.DeviceHistories
+				.Where(x => x.DeviceId == id)
+				.OrderBy(x => x.StartDate).ToList();
+
+			if (histories != null)
+				return Ok(histories);
+
+			return NotFound($"No device with id: {id}");
+		}
+
+		[HttpGet("DevicesForUser/{id}")]
+		[ProducesResponseType(typeof(List<DevicesForUserResponse>), StatusCodes.Status200OK)]
+		public IActionResult GetHistoryForUserById([FromRoute] string id)
+		{
+			var histories = dbContext.DeviceHistories
+				.Where(x => x.UserId == id)
+				.Where(x => x.EndDate == null).ToList();
+
+			var user = dbContext.AspNetUsers.Where(x => x.Id == id).FirstOrDefault();
+			if(user == null)
+				return NotFound($"No user with id: {id}");
+
+			List<DevicesForUserResponse> response = new List<DevicesForUserResponse>();
+			if (histories != null)
+			{
+				foreach(var h in histories)
+				{
+					response.Add(new DevicesForUserResponse()
+					{
+						Name = dbContext.Devices.Where(x => x.Id == h.DeviceId).FirstOrDefault()?.Name,
+						StartDate = h.StartDate
+					});
+				}
+			}
+			return Ok(response);
+		}
+
 		[HttpPost("AddHistoryEntry")]
 		[ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
-		public IActionResult AddHistoryEntry([FromQuery] int deviceId, [FromQuery] string userId)
+		public IActionResult AddHistoryEntry([FromQuery] int deviceId, [FromQuery] string userId, [FromQuery] bool startAssignment)
 		{
 			var device = dbContext.Devices.Where(x => x.Id == deviceId).FirstOrDefault();
 			if(device == null)
 				return NotFound($"No device with id: {deviceId}");
+
 			var user = dbContext.AspNetUsers.Where(x => x.Id == userId);
 			if (user == null)
 				return NotFound($"No user with id: {userId}");
 
-			var historyEntryToBeClosed = dbContext.DeviceHistories.Where(x => x.Id == deviceId && x.EndDate == null && x.UserId != userId).FirstOrDefault();
-			if (historyEntryToBeClosed != null)
-				historyEntryToBeClosed.EndDate = DateTime.Now;
+			var allHistory = dbContext.DeviceHistories.ToList();
 
-			dbContext.DeviceHistories.Add(new DeviceHistory()
+			var currentyHistory = dbContext.DeviceHistories
+				.Where(x => x.EndDate == null)
+				.Where(x => x.DeviceId == deviceId).FirstOrDefault();
+
+			if (startAssignment)
 			{
-				DeviceId = deviceId,
-				UserId = userId,
-				StartDate = DateTime.Now
-			});
+				if (currentyHistory != null)
+				{
+					bool alreadyAssignedToThisUser = currentyHistory.UserId == userId;
+					if (alreadyAssignedToThisUser)
+						return Ok("Nothing to do, already assigned");
+
+					bool assignedToSomeoneElse = currentyHistory.UserId != userId;
+					if (assignedToSomeoneElse)
+					{
+						currentyHistory.EndDate = DateTime.Now;
+						dbContext.DeviceHistories.Update(currentyHistory);
+					}
+
+				}
+				dbContext.DeviceHistories.Add(new DeviceHistory()
+				{
+					DeviceId = deviceId,
+					UserId = userId,
+					StartDate = DateTime.Now
+				});
+			}
+			else
+			{
+				if (currentyHistory == null)
+					throw new Exception("Not assigned to user, can't terminate");
+				else
+				{
+					currentyHistory.EndDate = DateTime.Now;
+					dbContext.DeviceHistories.Update(currentyHistory);
+				}
+			}
+
 			dbContext.SaveChanges();
 
 			return Ok("OK");
