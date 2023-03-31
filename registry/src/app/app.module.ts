@@ -40,6 +40,8 @@ import { ConfirmationModalComponent } from './shared/confirmation-modal/confirma
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSelectModule } from '@angular/material/select';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { DeviceHistoryComponent } from './pages/device-history/device-history.component';
+import { SoftwareHistoryComponent } from './pages/software-history/software-history.component';
 
 @NgModule({
   declarations: [
@@ -59,6 +61,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     AuthenticationComponent,
     BooleanToHunPipe,
     ConfirmationModalComponent,
+    DeviceHistoryComponent,
+    SoftwareHistoryComponent,
   ],
   imports: [
     BrowserModule,

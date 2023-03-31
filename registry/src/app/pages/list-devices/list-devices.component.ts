@@ -73,6 +73,10 @@ export class ListDevicesComponent implements OnInit {
     });
   }
 
+  history(id: number) {
+    this.router.navigate([`./device-history/${id}`]);
+  }
+
   getUserName(userId: string) {
     return this.users?.find((x) => x.id === userId)?.userName;
   }
