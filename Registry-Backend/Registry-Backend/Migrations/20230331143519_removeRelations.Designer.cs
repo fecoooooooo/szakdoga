@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Registry_Backend.Models;
 
@@ -11,9 +12,11 @@ using Registry_Backend.Models;
 namespace Registry_Backend.Migrations
 {
     [DbContext(typeof(RegistryContext))]
-    partial class RegistryContextModelSnapshot : ModelSnapshot
+    [Migration("20230331143519_removeRelations")]
+    partial class removeRelations
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -312,6 +315,8 @@ namespace Registry_Backend.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("UserId");
+
                     b.ToTable("DeviceHistory", (string)null);
                 });
 
@@ -440,6 +445,17 @@ namespace Registry_Backend.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Registry_Backend.Models.DeviceHistory", b =>
+                {
+                    b.HasOne("Registry_Backend.Models.AspNetUser", "User")
+                        .WithMany("DeviceHistories")
+                        .HasForeignKey("UserId")
+                        .IsRequired()
+                        .HasConstraintName("FK_DeviceHistory_AspNetUsers");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Registry_Backend.Models.AspNetRole", b =>
                 {
                     b.Navigation("AspNetRoleClaims");
@@ -452,6 +468,8 @@ namespace Registry_Backend.Migrations
                     b.Navigation("AspNetUserLogins");
 
                     b.Navigation("AspNetUserTokens");
+
+                    b.Navigation("DeviceHistories");
                 });
 #pragma warning restore 612, 618
         }

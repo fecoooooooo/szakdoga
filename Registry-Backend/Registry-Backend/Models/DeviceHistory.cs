@@ -15,4 +15,5 @@ public partial class DeviceHistory
 
     public DateTime? EndDate { get; set; }
 
+    public virtual AspNetUser User { get; set; } = null!;
 }

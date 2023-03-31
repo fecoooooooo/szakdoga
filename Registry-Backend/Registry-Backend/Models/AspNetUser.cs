@@ -43,7 +43,5 @@ public partial class AspNetUser
 
     public virtual ICollection<DeviceHistory> DeviceHistories { get; } = new List<DeviceHistory>();
 
-    public virtual ICollection<SoftwareHistory> SoftwareHistories { get; } = new List<SoftwareHistory>();
-
     public virtual ICollection<AspNetRole> Roles { get; } = new List<AspNetRole>();
 }
