@@ -138,13 +138,7 @@ public partial class RegistryContext : DbContext
         {
             entity.ToTable("DeviceHistory");
 
-            entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.UserId).HasMaxLength(450);
-
-            entity.HasOne(d => d.User).WithMany(p => p.DeviceHistories)
-                .HasForeignKey(d => d.UserId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_DeviceHistory_AspNetUsers");
         });
 
         modelBuilder.Entity<Software>(entity =>
@@ -166,7 +160,6 @@ public partial class RegistryContext : DbContext
         {
             entity.ToTable("SoftwareHistory");
 
-            entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.UserId).HasMaxLength(450);
         });
 
