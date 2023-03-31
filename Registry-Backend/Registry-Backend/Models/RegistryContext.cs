@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Registry_Backend.Models;
 
-public partial class RegistryContext : IdentityDbContext<IdentityUser, IdentityRole, string>
+public partial class RegistryContext : DbContext
 {
     public RegistryContext()
     {
