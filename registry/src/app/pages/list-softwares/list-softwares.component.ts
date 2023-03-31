@@ -75,6 +75,12 @@ export class ListSoftwaresComponent {
     });
   }
 
+  history(id: number) {
+    this.router.navigate([`./software-history/${id}`], {
+      relativeTo: this.route,
+    });
+  }
+
   getUserName(userId: string) {
     return this.users?.find((x) => x.id === userId)?.userName;
   }

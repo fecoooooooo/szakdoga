@@ -71,28 +71,28 @@ export class EditDeviceComponent implements OnInit {
 
     forkJoin({
       users: this.usersService.allUsersGet(),
-      softwares: this.devicesService.apiDevicesAllDevicesGet(),
+      devices: this.devicesService.apiDevicesAllDevicesGet(),
     }).subscribe((result) => {
       this.users = result.users;
 
-      this.inUseSerials = result.softwares
+      this.inUseSerials = result.devices
         .map((x) => x.serialNumber)
         .filter((x) => x != null) as string[];
 
       if (
-        id !== null ||
-        result.softwares.find((x) => (x.id = +id!)) !== undefined
+        id !== null &&
+        result.devices.find((x) => x.id === +id!) !== undefined
       ) {
-        let currentSoftware = result.softwares.find((x) => (x.id = +id!));
+        let currentDevice = result.devices.find((x) => x.id === +id!);
 
-        if (currentSoftware !== undefined) {
-          this.serialControl.setValue(currentSoftware.serialNumber);
-          this.nameControl.setValue(currentSoftware.name);
-          this.descriptionControl.setValue(currentSoftware.description);
-          this.priceControl.setValue(currentSoftware.price);
-          this.linkControl.setValue(currentSoftware.link);
-          this.userIdControl.setValue(currentSoftware.userId);
-          this.isActiveControl.setValue(currentSoftware.isActive);
+        if (currentDevice !== undefined) {
+          this.serialControl.setValue(currentDevice.serialNumber);
+          this.nameControl.setValue(currentDevice.name);
+          this.descriptionControl.setValue(currentDevice.description);
+          this.priceControl.setValue(currentDevice.price);
+          this.linkControl.setValue(currentDevice.link);
+          this.userIdControl.setValue(currentDevice.userId);
+          this.isActiveControl.setValue(currentDevice.isActive);
 
           this.deviceDataRecieved = true;
 
@@ -101,7 +101,7 @@ export class EditDeviceComponent implements OnInit {
           this.serialControl.addValidators(
             CommonValidators.inUseKeyValidator(
               this.inUseSerials,
-              currentSoftware.serialNumber
+              currentDevice.serialNumber
             )
           );
         }

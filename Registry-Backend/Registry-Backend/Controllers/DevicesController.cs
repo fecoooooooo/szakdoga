@@ -90,5 +90,31 @@ namespace Registry_Backend.Controllers
 
 			return Ok("OK");
 		}
+
+		[HttpPost("AddHistoryEntry")]
+		[ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+		public IActionResult AddHistoryEntry([FromQuery] int deviceId, [FromQuery] string userId)
+		{
+			var device = dbContext.Devices.Where(x => x.Id == deviceId).FirstOrDefault();
+			if(device == null)
+				return NotFound($"No device with id: {deviceId}");
+			var user = dbContext.AspNetUsers.Where(x => x.Id == userId);
+			if (user == null)
+				return NotFound($"No user with id: {userId}");
+
+			var historyEntryToBeClosed = dbContext.DeviceHistories.Where(x => x.Id == deviceId && x.EndDate == null && x.UserId != userId).FirstOrDefault();
+			if (historyEntryToBeClosed != null)
+				historyEntryToBeClosed.EndDate = DateTime.Now;
+
+			dbContext.DeviceHistories.Add(new DeviceHistory()
+			{
+				DeviceId = deviceId,
+				UserId = userId,
+				StartDate = DateTime.Now
+			});
+			dbContext.SaveChanges();
+
+			return Ok("OK");
+		}
 	}
 }

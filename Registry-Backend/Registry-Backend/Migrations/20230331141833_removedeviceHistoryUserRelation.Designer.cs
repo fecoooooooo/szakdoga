@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Registry_Backend.Models;
 
@@ -11,9 +12,11 @@ using Registry_Backend.Models;
 namespace Registry_Backend.Migrations
 {
     [DbContext(typeof(RegistryContext))]
-    partial class RegistryContextModelSnapshot : ModelSnapshot
+    [Migration("20230331141833_removedeviceHistoryUserRelation")]
+    partial class removedeviceHistoryUserRelation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -35,6 +38,40 @@ namespace Registry_Backend.Migrations
                     b.HasIndex(new[] { "RoleId" }, "IX_AspNetUserRoles_RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
+                });
+
+            modelBuilder.Entity("Registry_Backend.Models.ApplicationLog", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Callsite")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Exception")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Level")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime>("Logged")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Logger")
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
+                    b.Property<string>("MachineName")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Message")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ApplicationLog", (string)null);
                 });
 
             modelBuilder.Entity("Registry_Backend.Models.AspNetRole", b =>

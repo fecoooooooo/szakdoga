@@ -12,7 +12,7 @@
 
     <ng-container matColumnDef="license">
       <th mat-header-cell *matHeaderCellDef>Licensz</th>
-      <td mat-cell *matCellDef="let element">{{ element.licence }}</td>
+      <td mat-cell *matCellDef="let element">{{ element.license }}</td>
     </ng-container>
     <ng-container matColumnDef="name">
       <th mat-header-cell *matHeaderCellDef>Név</th>
@@ -49,6 +49,9 @@
         <div class="button-flex-container">
           <button mat-mini-fab color="primary" (click)="edit(element.id)">
             <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-mini-fab color="primary" (click)="history(element.id)">
+            <mat-icon>history</mat-icon>
           </button>
           <button mat-mini-fab color="warn" (click)="delete(element.id)">
             <mat-icon>delete</mat-icon>

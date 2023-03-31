@@ -17,7 +17,6 @@ public partial class RegistryContext : DbContext
     {
     }
 
-	public virtual DbSet<ApplicationLog> ApplicationLogs { get; set; }
 
     public virtual DbSet<AspNetRole> AspNetRoles { get; set; }
 
@@ -45,15 +44,7 @@ public partial class RegistryContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<ApplicationLog>(entity =>
-        {
-            entity.ToTable("ApplicationLog");
 
-            entity.Property(e => e.Id).ValueGeneratedNever();
-            entity.Property(e => e.Level).HasMaxLength(50);
-            entity.Property(e => e.Logger).HasMaxLength(250);
-            entity.Property(e => e.MachineName).HasMaxLength(50);
-        });
 
         modelBuilder.Entity<AspNetRole>(entity =>
         {
@@ -143,10 +134,6 @@ public partial class RegistryContext : DbContext
             entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.UserId).HasMaxLength(450);
 
-            entity.HasOne(d => d.User).WithMany(p => p.DeviceHistories)
-                .HasForeignKey(d => d.UserId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_DeviceHistory_AspNetUsers");
         });
 
         modelBuilder.Entity<Software>(entity =>

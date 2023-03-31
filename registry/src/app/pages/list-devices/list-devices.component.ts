@@ -74,7 +74,9 @@ export class ListDevicesComponent implements OnInit {
   }
 
   history(id: number) {
-    this.router.navigate([`./device-history/${id}`]);
+    this.router.navigate([`./device-history/${id}`], {
+      relativeTo: this.route,
+    });
   }
 
   getUserName(userId: string) {

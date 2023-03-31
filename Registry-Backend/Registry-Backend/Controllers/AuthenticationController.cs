@@ -16,7 +16,7 @@ namespace Registry_Backend.Controllers
 		}
 
 		[HttpGet("DEBUG_GenerateSwaggerJson")]
-		[ProducesResponseType(typeof(List<Sample>), StatusCodes.Status200OK)]
+		[ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
 		public IActionResult GetSamples()
 		{
 			using (var client = new WebClient())

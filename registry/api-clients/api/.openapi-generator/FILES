@@ -15,5 +15,6 @@ model/identityUser.ts
 model/models.ts
 model/sample.ts
 model/software.ts
+model/userRequest.ts
 param.ts
 variables.ts

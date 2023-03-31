@@ -84,10 +84,10 @@ export class EditSoftwareComponent {
         .filter((x) => x != null) as string[];
 
       if (
-        id !== null ||
-        result.softwares.find((x) => (x.id = +id!)) !== undefined
+        id !== null &&
+        result.softwares.find((x) => x.id === +id!) !== undefined
       ) {
-        let currentSoftware = result.softwares.find((x) => (x.id = +id!));
+        let currentSoftware = result.softwares.find((x) => x.id === +id!);
 
         if (currentSoftware !== undefined) {
           this.licenseControl.setValue(currentSoftware.license);
