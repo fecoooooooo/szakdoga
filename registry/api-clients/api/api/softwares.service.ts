@@ -18,6 +18,10 @@ import { Observable }                                        from 'rxjs';
 
 // @ts-ignore
 import { Software } from '../model/software';
+// @ts-ignore
+import { SoftwareHistory } from '../model/softwareHistory';
+// @ts-ignore
+import { SoftwaresForUserResponse } from '../model/softwaresForUserResponse';
 
 // @ts-ignore
 import { BASE_PATH, LOADER_TYPE_TOKEN, COLLECTION_FORMATS }                     from '../variables';
@@ -96,6 +100,70 @@ export class SoftwaresService {
             throw Error("key may not be null if value is not object or array");
         }
         return httpParams;
+    }
+
+    /**
+     * @param softwareId 
+     * @param userId 
+     * @param startAssignment 
+     * @param loaderType modify the httpContext->loaderTypeToken value
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public apiSoftwaresAddHistoryEntryPost(softwareId?: number, userId?: string, startAssignment?: boolean, loaderType?: 'info' | 'lock' | 'default', observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<string>;
+    public apiSoftwaresAddHistoryEntryPost(softwareId?: number, userId?: string, startAssignment?: boolean, loaderType?: 'info' | 'lock' | 'default', observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpResponse<string>>;
+    public apiSoftwaresAddHistoryEntryPost(softwareId?: number, userId?: string, startAssignment?: boolean, loaderType?: 'info' | 'lock' | 'default', observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpEvent<string>>;
+    public apiSoftwaresAddHistoryEntryPost(softwareId?: number, userId?: string, startAssignment?: boolean, loaderType?: 'info' | 'lock' | 'default', observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<any> {
+        let lvQueryParameters = new HttpParams({encoder: this.encoder});
+          lvQueryParameters = this.addToHttpParams(lvQueryParameters,
+            <any>softwareId, 'softwareId');
+          lvQueryParameters = this.addToHttpParams(lvQueryParameters,
+            <any>userId, 'userId');
+          lvQueryParameters = this.addToHttpParams(lvQueryParameters,
+            <any>startAssignment, 'startAssignment');
+        let lvHeaders = this.defaultHeaders;
+        let lvHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (lvHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'text/plain',
+                'application/json',
+                'text/json'
+            ];
+            lvHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (lvHttpHeaderAcceptSelected !== undefined) {
+            lvHeaders = lvHeaders.set('Accept', lvHttpHeaderAcceptSelected);
+        }
+        let lvHttpContext: HttpContext | undefined;
+        lvHttpContext = options && options.context;
+        if (lvHttpContext === undefined) {
+            lvHttpContext = new HttpContext();
+        }
+        if(this.loaderTypeToken) {
+            lvHttpContext.set(this.loaderTypeToken, loaderType === undefined || loaderType === null ? 'default' : loaderType);
+        }
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (lvHttpHeaderAcceptSelected) {
+            if (lvHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(lvHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+        let lvPath = `/api/Softwares/AddHistoryEntry`;
+        return this.httpClient.request<string>('post', `${this.configuration.basePath}${lvPath}`,
+            {
+                context: lvHttpContext,
+                params: lvQueryParameters,
+                responseType: <any>responseType_,
+                headers: lvHeaders,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
     }
 
     /**
@@ -280,6 +348,63 @@ export class SoftwaresService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
+    public apiSoftwaresHistoryForSoftwareIdGet(id: number, loaderType?: 'info' | 'lock' | 'default', observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<Array<SoftwareHistory>>;
+    public apiSoftwaresHistoryForSoftwareIdGet(id: number, loaderType?: 'info' | 'lock' | 'default', observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpResponse<Array<SoftwareHistory>>>;
+    public apiSoftwaresHistoryForSoftwareIdGet(id: number, loaderType?: 'info' | 'lock' | 'default', observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpEvent<Array<SoftwareHistory>>>;
+    public apiSoftwaresHistoryForSoftwareIdGet(id: number, loaderType?: 'info' | 'lock' | 'default', observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<any> {
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling apiSoftwaresHistoryForSoftwareIdGet.');
+        }
+        let lvHeaders = this.defaultHeaders;
+        let lvHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (lvHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'text/plain',
+                'application/json',
+                'text/json'
+            ];
+            lvHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (lvHttpHeaderAcceptSelected !== undefined) {
+            lvHeaders = lvHeaders.set('Accept', lvHttpHeaderAcceptSelected);
+        }
+        let lvHttpContext: HttpContext | undefined;
+        lvHttpContext = options && options.context;
+        if (lvHttpContext === undefined) {
+            lvHttpContext = new HttpContext();
+        }
+        if(this.loaderTypeToken) {
+            lvHttpContext.set(this.loaderTypeToken, loaderType === undefined || loaderType === null ? 'default' : loaderType);
+        }
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (lvHttpHeaderAcceptSelected) {
+            if (lvHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(lvHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+        let lvPath = `/api/Softwares/HistoryForSoftware/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int32"})}`;
+        return this.httpClient.request<Array<SoftwareHistory>>('get', `${this.configuration.basePath}${lvPath}`,
+            {
+                context: lvHttpContext,
+                responseType: <any>responseType_,
+                headers: lvHeaders,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * @param id 
+     * @param loaderType modify the httpContext->loaderTypeToken value
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
     public apiSoftwaresSingleIdGet(id: number, loaderType?: 'info' | 'lock' | 'default', observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<Software>;
     public apiSoftwaresSingleIdGet(id: number, loaderType?: 'info' | 'lock' | 'default', observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpResponse<Software>>;
     public apiSoftwaresSingleIdGet(id: number, loaderType?: 'info' | 'lock' | 'default', observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpEvent<Software>>;
@@ -321,6 +446,63 @@ export class SoftwaresService {
         }
         let lvPath = `/api/Softwares/Single/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int32"})}`;
         return this.httpClient.request<Software>('get', `${this.configuration.basePath}${lvPath}`,
+            {
+                context: lvHttpContext,
+                responseType: <any>responseType_,
+                headers: lvHeaders,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * @param id 
+     * @param loaderType modify the httpContext->loaderTypeToken value
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public apiSoftwaresSoftwaresForUserIdGet(id: string, loaderType?: 'info' | 'lock' | 'default', observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<Array<SoftwaresForUserResponse>>;
+    public apiSoftwaresSoftwaresForUserIdGet(id: string, loaderType?: 'info' | 'lock' | 'default', observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpResponse<Array<SoftwaresForUserResponse>>>;
+    public apiSoftwaresSoftwaresForUserIdGet(id: string, loaderType?: 'info' | 'lock' | 'default', observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpEvent<Array<SoftwaresForUserResponse>>>;
+    public apiSoftwaresSoftwaresForUserIdGet(id: string, loaderType?: 'info' | 'lock' | 'default', observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<any> {
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling apiSoftwaresSoftwaresForUserIdGet.');
+        }
+        let lvHeaders = this.defaultHeaders;
+        let lvHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (lvHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'text/plain',
+                'application/json',
+                'text/json'
+            ];
+            lvHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (lvHttpHeaderAcceptSelected !== undefined) {
+            lvHeaders = lvHeaders.set('Accept', lvHttpHeaderAcceptSelected);
+        }
+        let lvHttpContext: HttpContext | undefined;
+        lvHttpContext = options && options.context;
+        if (lvHttpContext === undefined) {
+            lvHttpContext = new HttpContext();
+        }
+        if(this.loaderTypeToken) {
+            lvHttpContext.set(this.loaderTypeToken, loaderType === undefined || loaderType === null ? 'default' : loaderType);
+        }
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (lvHttpHeaderAcceptSelected) {
+            if (lvHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(lvHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+        let lvPath = `/api/Softwares/SoftwaresForUser/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        return this.httpClient.request<Array<SoftwaresForUserResponse>>('get', `${this.configuration.basePath}${lvPath}`,
             {
                 context: lvHttpContext,
                 responseType: <any>responseType_,

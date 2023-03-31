@@ -7,7 +7,6 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { AspNetUser } from './aspNetUser';
 
 
 export interface DeviceHistory { 
@@ -16,6 +15,5 @@ export interface DeviceHistory {
     deviceId?: number;
     startDate?: string;
     endDate?: string | null;
-    user?: AspNetUser;
 }
 

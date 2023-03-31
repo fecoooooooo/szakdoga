@@ -18,6 +18,10 @@ import { Observable }                                        from 'rxjs';
 
 // @ts-ignore
 import { Device } from '../model/device';
+// @ts-ignore
+import { DeviceHistory } from '../model/deviceHistory';
+// @ts-ignore
+import { DevicesForUserResponse } from '../model/devicesForUserResponse';
 
 // @ts-ignore
 import { BASE_PATH, LOADER_TYPE_TOKEN, COLLECTION_FORMATS }                     from '../variables';
@@ -165,6 +169,70 @@ export class DevicesService {
     }
 
     /**
+     * @param deviceId 
+     * @param userId 
+     * @param startAssignment 
+     * @param loaderType modify the httpContext->loaderTypeToken value
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public apiDevicesAddHistoryEntryPost(deviceId?: number, userId?: string, startAssignment?: boolean, loaderType?: 'info' | 'lock' | 'default', observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<string>;
+    public apiDevicesAddHistoryEntryPost(deviceId?: number, userId?: string, startAssignment?: boolean, loaderType?: 'info' | 'lock' | 'default', observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpResponse<string>>;
+    public apiDevicesAddHistoryEntryPost(deviceId?: number, userId?: string, startAssignment?: boolean, loaderType?: 'info' | 'lock' | 'default', observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpEvent<string>>;
+    public apiDevicesAddHistoryEntryPost(deviceId?: number, userId?: string, startAssignment?: boolean, loaderType?: 'info' | 'lock' | 'default', observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<any> {
+        let lvQueryParameters = new HttpParams({encoder: this.encoder});
+          lvQueryParameters = this.addToHttpParams(lvQueryParameters,
+            <any>deviceId, 'deviceId');
+          lvQueryParameters = this.addToHttpParams(lvQueryParameters,
+            <any>userId, 'userId');
+          lvQueryParameters = this.addToHttpParams(lvQueryParameters,
+            <any>startAssignment, 'startAssignment');
+        let lvHeaders = this.defaultHeaders;
+        let lvHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (lvHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'text/plain',
+                'application/json',
+                'text/json'
+            ];
+            lvHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (lvHttpHeaderAcceptSelected !== undefined) {
+            lvHeaders = lvHeaders.set('Accept', lvHttpHeaderAcceptSelected);
+        }
+        let lvHttpContext: HttpContext | undefined;
+        lvHttpContext = options && options.context;
+        if (lvHttpContext === undefined) {
+            lvHttpContext = new HttpContext();
+        }
+        if(this.loaderTypeToken) {
+            lvHttpContext.set(this.loaderTypeToken, loaderType === undefined || loaderType === null ? 'default' : loaderType);
+        }
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (lvHttpHeaderAcceptSelected) {
+            if (lvHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(lvHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+        let lvPath = `/api/Devices/AddHistoryEntry`;
+        return this.httpClient.request<string>('post', `${this.configuration.basePath}${lvPath}`,
+            {
+                context: lvHttpContext,
+                params: lvQueryParameters,
+                responseType: <any>responseType_,
+                headers: lvHeaders,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * @param loaderType modify the httpContext->loaderTypeToken value
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -264,6 +332,120 @@ export class DevicesService {
         }
         let lvPath = `/api/Devices/Delete/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int32"})}`;
         return this.httpClient.request<string>('delete', `${this.configuration.basePath}${lvPath}`,
+            {
+                context: lvHttpContext,
+                responseType: <any>responseType_,
+                headers: lvHeaders,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * @param id 
+     * @param loaderType modify the httpContext->loaderTypeToken value
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public apiDevicesDevicesForUserIdGet(id: string, loaderType?: 'info' | 'lock' | 'default', observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<Array<DevicesForUserResponse>>;
+    public apiDevicesDevicesForUserIdGet(id: string, loaderType?: 'info' | 'lock' | 'default', observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpResponse<Array<DevicesForUserResponse>>>;
+    public apiDevicesDevicesForUserIdGet(id: string, loaderType?: 'info' | 'lock' | 'default', observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpEvent<Array<DevicesForUserResponse>>>;
+    public apiDevicesDevicesForUserIdGet(id: string, loaderType?: 'info' | 'lock' | 'default', observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<any> {
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling apiDevicesDevicesForUserIdGet.');
+        }
+        let lvHeaders = this.defaultHeaders;
+        let lvHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (lvHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'text/plain',
+                'application/json',
+                'text/json'
+            ];
+            lvHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (lvHttpHeaderAcceptSelected !== undefined) {
+            lvHeaders = lvHeaders.set('Accept', lvHttpHeaderAcceptSelected);
+        }
+        let lvHttpContext: HttpContext | undefined;
+        lvHttpContext = options && options.context;
+        if (lvHttpContext === undefined) {
+            lvHttpContext = new HttpContext();
+        }
+        if(this.loaderTypeToken) {
+            lvHttpContext.set(this.loaderTypeToken, loaderType === undefined || loaderType === null ? 'default' : loaderType);
+        }
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (lvHttpHeaderAcceptSelected) {
+            if (lvHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(lvHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+        let lvPath = `/api/Devices/DevicesForUser/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        return this.httpClient.request<Array<DevicesForUserResponse>>('get', `${this.configuration.basePath}${lvPath}`,
+            {
+                context: lvHttpContext,
+                responseType: <any>responseType_,
+                headers: lvHeaders,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * @param id 
+     * @param loaderType modify the httpContext->loaderTypeToken value
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public apiDevicesHistoryForDeviceIdGet(id: number, loaderType?: 'info' | 'lock' | 'default', observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<Array<DeviceHistory>>;
+    public apiDevicesHistoryForDeviceIdGet(id: number, loaderType?: 'info' | 'lock' | 'default', observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpResponse<Array<DeviceHistory>>>;
+    public apiDevicesHistoryForDeviceIdGet(id: number, loaderType?: 'info' | 'lock' | 'default', observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpEvent<Array<DeviceHistory>>>;
+    public apiDevicesHistoryForDeviceIdGet(id: number, loaderType?: 'info' | 'lock' | 'default', observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<any> {
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling apiDevicesHistoryForDeviceIdGet.');
+        }
+        let lvHeaders = this.defaultHeaders;
+        let lvHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (lvHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'text/plain',
+                'application/json',
+                'text/json'
+            ];
+            lvHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (lvHttpHeaderAcceptSelected !== undefined) {
+            lvHeaders = lvHeaders.set('Accept', lvHttpHeaderAcceptSelected);
+        }
+        let lvHttpContext: HttpContext | undefined;
+        lvHttpContext = options && options.context;
+        if (lvHttpContext === undefined) {
+            lvHttpContext = new HttpContext();
+        }
+        if(this.loaderTypeToken) {
+            lvHttpContext.set(this.loaderTypeToken, loaderType === undefined || loaderType === null ? 'default' : loaderType);
+        }
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (lvHttpHeaderAcceptSelected) {
+            if (lvHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(lvHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+        let lvPath = `/api/Devices/HistoryForDevice/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int32"})}`;
+        return this.httpClient.request<Array<DeviceHistory>>('get', `${this.configuration.basePath}${lvPath}`,
             {
                 context: lvHttpContext,
                 responseType: <any>responseType_,

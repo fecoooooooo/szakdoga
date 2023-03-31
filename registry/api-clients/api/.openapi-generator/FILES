@@ -11,10 +11,13 @@ encoder.ts
 git_push.sh
 index.ts
 model/device.ts
+model/deviceHistory.ts
+model/devicesForUserResponse.ts
 model/identityUser.ts
 model/models.ts
-model/sample.ts
 model/software.ts
+model/softwareHistory.ts
+model/softwaresForUserResponse.ts
 model/userRequest.ts
 param.ts
 variables.ts

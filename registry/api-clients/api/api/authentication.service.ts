@@ -16,8 +16,6 @@ import { HttpClient, HttpHeaders, HttpParams, HttpContextToken,
 import { CustomHttpParameterCodec }                          from '../encoder';
 import { Observable }                                        from 'rxjs';
 
-// @ts-ignore
-import { Sample } from '../model/sample';
 
 // @ts-ignore
 import { BASE_PATH, LOADER_TYPE_TOKEN, COLLECTION_FORMATS }                     from '../variables';
@@ -203,9 +201,9 @@ export class AuthenticationService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public apiAuthenticationDEBUGGenerateSwaggerJsonGet(loaderType?: 'info' | 'lock' | 'default', observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<Array<Sample>>;
-    public apiAuthenticationDEBUGGenerateSwaggerJsonGet(loaderType?: 'info' | 'lock' | 'default', observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpResponse<Array<Sample>>>;
-    public apiAuthenticationDEBUGGenerateSwaggerJsonGet(loaderType?: 'info' | 'lock' | 'default', observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpEvent<Array<Sample>>>;
+    public apiAuthenticationDEBUGGenerateSwaggerJsonGet(loaderType?: 'info' | 'lock' | 'default', observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<string>;
+    public apiAuthenticationDEBUGGenerateSwaggerJsonGet(loaderType?: 'info' | 'lock' | 'default', observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpResponse<string>>;
+    public apiAuthenticationDEBUGGenerateSwaggerJsonGet(loaderType?: 'info' | 'lock' | 'default', observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpEvent<string>>;
     public apiAuthenticationDEBUGGenerateSwaggerJsonGet(loaderType?: 'info' | 'lock' | 'default', observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<any> {
         let lvHeaders = this.defaultHeaders;
         let lvHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
@@ -240,7 +238,7 @@ export class AuthenticationService {
             }
         }
         let lvPath = `/api/Authentication/DEBUG_GenerateSwaggerJson`;
-        return this.httpClient.request<Array<Sample>>('get', `${this.configuration.basePath}${lvPath}`,
+        return this.httpClient.request<string>('get', `${this.configuration.basePath}${lvPath}`,
             {
                 context: lvHttpContext,
                 responseType: <any>responseType_,

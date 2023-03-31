@@ -134,8 +134,16 @@ export class EditSoftwareComponent {
       if (this.isCreate) {
         this.softwaresService
           .apiSoftwaresAddSoftwarePost(software)
-          .subscribe((r) => {
-            this.router.navigate([`/manage-softwares`]);
+          .subscribe((newId) => {
+            this.softwaresService
+              .apiSoftwaresAddHistoryEntryPost(
+                +newId,
+                this.userIdControl.value,
+                this.userIdControl.value !== null
+              )
+              .subscribe((r) => {
+                this.router.navigate([`/manage-softwares`]);
+              });
           });
       } else {
         software.id = this.softwareId;
@@ -143,7 +151,15 @@ export class EditSoftwareComponent {
         this.softwaresService
           .apiSoftwaresUpdateSoftwarePatch(software)
           .subscribe((r) => {
-            this.router.navigate([`/manage-softwares`]);
+            this.softwaresService
+              .apiSoftwaresAddHistoryEntryPost(
+                software.id,
+                this.userIdControl.value,
+                this.userIdControl.value !== null
+              )
+              .subscribe((r) => {
+                this.router.navigate([`/manage-softwares`]);
+              });
           });
       }
     }

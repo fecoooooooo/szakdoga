@@ -83,10 +83,10 @@ namespace Registry_Backend.Controllers
 		[ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
 		public IActionResult AddDevice([FromBody] Device device)
 		{
-			dbContext.Devices.Add(device);
+			var result = dbContext.Devices.Add(device);
 			dbContext.SaveChanges();
 
-			return Ok("OK");
+			return Ok(result.Entity.Id);
 		}
 
 
@@ -133,7 +133,7 @@ namespace Registry_Backend.Controllers
 
 		[HttpPost("AddHistoryEntry")]
 		[ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
-		public IActionResult AddHistoryEntry([FromQuery] int deviceId, [FromQuery] string userId, [FromQuery] bool startAssignment)
+		public IActionResult AddHistoryEntry([FromQuery] int deviceId, [FromQuery] string? userId, [FromQuery] bool startAssignment)
 		{
 			var device = dbContext.Devices.Where(x => x.Id == deviceId).FirstOrDefault();
 			if(device == null)
@@ -175,7 +175,7 @@ namespace Registry_Backend.Controllers
 			else
 			{
 				if (currentyHistory == null)
-					throw new Exception("Not assigned to user, can't terminate");
+					return Ok("Nothing to do, already unassigned");
 				else
 				{
 					currentyHistory.EndDate = DateTime.Now;

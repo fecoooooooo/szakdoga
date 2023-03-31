@@ -9,11 +9,8 @@
  */
 
 
-export interface SoftwareHistory { 
-    id?: number;
-    userId?: string | null;
-    softwareId?: number;
+export interface SoftwaresForUserResponse { 
+    name?: string | null;
     startDate?: string;
-    endDate?: string | null;
 }
 
