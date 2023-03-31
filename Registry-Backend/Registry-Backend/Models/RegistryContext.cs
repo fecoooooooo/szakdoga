@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Registry_Backend.Models;
 
-public partial class RegistryContext : DbContext
+public partial class RegistryContext : IdentityDbContext<IdentityUser, IdentityRole, string>
 {
     public RegistryContext()
     {
@@ -15,7 +17,7 @@ public partial class RegistryContext : DbContext
     {
     }
 
-    public virtual DbSet<ApplicationLog> ApplicationLogs { get; set; }
+	public virtual DbSet<ApplicationLog> ApplicationLogs { get; set; }
 
     public virtual DbSet<AspNetRole> AspNetRoles { get; set; }
 
