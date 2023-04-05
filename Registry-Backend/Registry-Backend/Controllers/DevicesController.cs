@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Registry_Backend.DTO;
 using Registry_Backend.Models;
@@ -11,10 +12,12 @@ namespace Registry_Backend.Controllers
 	public class DevicesController : ControllerBase
 	{
 		private readonly RegistryContext dbContext;
+		private readonly UserManager<IdentityUser> userManager;
 
-		public DevicesController(RegistryContext dbContext)
+		public DevicesController(RegistryContext dbContext, UserManager<IdentityUser> userManager)
 		{
 			this.dbContext = dbContext;
+			this.userManager = userManager;
 		}
 
 		[HttpGet("AllDevices")]
@@ -106,13 +109,13 @@ namespace Registry_Backend.Controllers
 
 		[HttpGet("DevicesForUser/{userId}")]
 		[ProducesResponseType(typeof(List<DevicesForUserResponse>), StatusCodes.Status200OK)]
-		public IActionResult GetHistoryForUserById([FromRoute] string userId)
+		public async Task<IActionResult> GetHistoryForUserById([FromRoute] string userId)
 		{
 			var histories = dbContext.DeviceHistories
 				.Where(x => x.UserId == userId)
 				.Where(x => x.EndDate == null).ToList();
-
-			var user = dbContext.AspNetUsers.Where(x => x.Id == userId).FirstOrDefault();
+			
+			var user = await userManager.FindByIdAsync(userId);
 			if(user == null)
 				return NotFound($"No user with id: {userId}");
 
@@ -123,7 +126,7 @@ namespace Registry_Backend.Controllers
 				{
 					response.Add(new DevicesForUserResponse()
 					{
-						UserName = dbContext.AspNetUsers.Where(x => x.Id == userId).FirstOrDefault()?.UserName,
+						UserName = user.UserName,
 						DeviceName = dbContext.Devices.Where(x => x.Id == h.DeviceId).FirstOrDefault()?.Name,
 						StartDate = h.StartDate
 					});
@@ -134,14 +137,14 @@ namespace Registry_Backend.Controllers
 
 		[HttpPost("AddHistoryEntry")]
 		[ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
-		public IActionResult AddHistoryEntry([FromQuery] int deviceId, [FromQuery] string? userId, [FromQuery] bool startAssignment)
+		public async Task<IActionResult> AddHistoryEntry([FromQuery] int deviceId, [FromQuery] string? userId, [FromQuery] bool startAssignment)
 		{
 			var device = dbContext.Devices.Where(x => x.Id == deviceId).FirstOrDefault();
 			if(device == null)
 				return NotFound($"No device with id: {deviceId}");
 
-			var user = dbContext.AspNetUsers.Where(x => x.Id == userId);
-			if (user == null)
+			var user = await userManager.FindByIdAsync(userId);
+			if (user == null && startAssignment)
 				return NotFound($"No user with id: {userId}");
 
 			var allHistory = dbContext.DeviceHistories.ToList();

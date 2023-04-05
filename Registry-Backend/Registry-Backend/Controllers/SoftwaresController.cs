@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Registry_Backend.DTO;
 using Registry_Backend.Models;
@@ -11,10 +12,12 @@ namespace Registry_Backend.Controllers
 	public class SoftwaresController : ControllerBase
 	{
 		private readonly RegistryContext dbContext;
+		private readonly UserManager<IdentityUser> userManager;
 
-		public SoftwaresController(RegistryContext dbContext)
+		public SoftwaresController(RegistryContext dbContext, UserManager<IdentityUser> userManager)
 		{
 			this.dbContext = dbContext;
+			this.userManager = userManager;
 		}
 
 		[HttpGet("AllSoftwares")]
@@ -107,13 +110,13 @@ namespace Registry_Backend.Controllers
 
 		[HttpGet("SoftwaresForUser/{userId}")]
 		[ProducesResponseType(typeof(List<SoftwaresForUserResponse>), StatusCodes.Status200OK)]
-		public IActionResult GetHistoryForUserById([FromRoute] string userId)
+		public async Task<IActionResult> GetHistoryForUserById([FromRoute] string userId)
 		{
 			var histories = dbContext.SoftwareHistories
 				.Where(x => x.UserId == userId)
 				.Where(x => x.EndDate == null).ToList();
 
-			var user = dbContext.AspNetUsers.Where(x => x.Id == userId).FirstOrDefault();
+			var user = await userManager.FindByIdAsync(userId);
 			if (user == null)
 				return NotFound($"No user with id: {userId}");
 
@@ -124,7 +127,7 @@ namespace Registry_Backend.Controllers
 				{
 					response.Add(new SoftwaresForUserResponse()
 					{
-						UserName = dbContext.AspNetUsers.Where(x => x.Id == userId).FirstOrDefault()?.UserName,
+						UserName = user.UserName,
 						SoftwareName = dbContext.Softwares.Where(x => x.Id == h.SoftwareId).FirstOrDefault()?.Name,
 						StartDate = h.StartDate
 					});
@@ -135,14 +138,14 @@ namespace Registry_Backend.Controllers
 
 		[HttpPost("AddHistoryEntry")]
 		[ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
-		public IActionResult AddHistoryEntry([FromQuery] int softwareId, [FromQuery] string? userId, [FromQuery] bool startAssignment)
+		public async Task<IActionResult> AddHistoryEntry([FromQuery] int softwareId, [FromQuery] string? userId, [FromQuery] bool startAssignment)
 		{
 			var software = dbContext.Softwares.Where(x => x.Id == softwareId).FirstOrDefault();
 			if (software == null)
 				return NotFound($"No software with id: {softwareId}");
 
-			var user = dbContext.AspNetUsers.Where(x => x.Id == userId);
-			if (user == null)
+			var user = await userManager.FindByIdAsync(userId);
+			if (user == null && startAssignment)
 				return NotFound($"No user with id: {userId}");
 
 			var allHistory = dbContext.SoftwareHistories.ToList();

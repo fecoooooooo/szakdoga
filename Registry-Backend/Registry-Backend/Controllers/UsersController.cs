@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNet.Identity;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Registry_Backend.DTO;
 using Registry_Backend.Models;
@@ -9,19 +8,19 @@ namespace Registry_Backend.Controllers
 	public class UsersController : ControllerBase
 	{
 		private readonly RegistryContext dbContext;
-		private readonly AspNetUserManager<IdentityUser> aspNetUserManager;
+		private readonly UserManager<IdentityUser> userManager;
 
-		public UsersController(RegistryContext dbContext, AspNetUserManager<IdentityUser> aspNetUserManager)
+		public UsersController(RegistryContext dbContext, UserManager<IdentityUser> userManager)
 		{
 			this.dbContext = dbContext;
-			this.aspNetUserManager = aspNetUserManager;
+			this.userManager = userManager;
 		}
 
 		[HttpGet("AllUsers")]
 		[ProducesResponseType(typeof(List<IdentityUser>), StatusCodes.Status200OK)]
-		public IActionResult GetSamples()
+		public IActionResult GetAllUSers()
 		{
-			var result = dbContext.AspNetUsers.ToList();
+			var result = userManager.Users.ToList();
 			if (result != null)
 				return Ok(result);
 
@@ -33,7 +32,7 @@ namespace Registry_Backend.Controllers
 		[ProducesResponseType(typeof(IdentityUser), StatusCodes.Status200OK)]
 		public async Task<IActionResult> GetUserById([FromRoute] string id)
 		{
-			var user = await aspNetUserManager.FindByIdAsync(id);
+			var user = await userManager.FindByIdAsync(id);
 			if (user != null)
 				return Ok(user);
 
@@ -44,10 +43,10 @@ namespace Registry_Backend.Controllers
 		[ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
 		public async Task<IActionResult> DeleteUser(string id)
 		{
-			var user = await aspNetUserManager.FindByIdAsync(id);
+			var user = await userManager.FindByIdAsync(id);
 			if (user != null)
 			{
-				var result = await aspNetUserManager.DeleteAsync(user);
+				var result = await userManager.DeleteAsync(user);
 				if (result.Succeeded)
 					return Ok("Ok");
 				else
@@ -57,31 +56,31 @@ namespace Registry_Backend.Controllers
 			return NotFound($"No User with id: {id}");
 		}
 
-		/*
-		[HttpPatch("UpdateUser")]
+		
+		[HttpPatch("UpdateUser/{userId}")]
 		[ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
-		public IActionResult UpdateSoftware([FromBody] AspNetUser user)
+		public async Task<IActionResult> UpdateUser([FromRoute] string userId, [FromBody] UserRequest user)
 		{
-			var oldUser = dbContext.AspNetUsers.Where(x => x.Id == user.Id).FirstOrDefault();
+			var userToUpdate = await userManager.FindByIdAsync(userId);
 
-			if (oldUser != null)
+			if (userToUpdate != null)
 			{
-				oldUser.UserName = user.UserName;
-				oldUser.Email = user.Email;
-				oldUser.PasswordHash = user.PasswordHash;
-				oldUser.Price = user.Price;
-				oldUser.ProductLink = user.ProductLink;
-				oldUser.UserId = user.UserId;
-				oldUser.IsActive = user.IsActive;
+				userToUpdate.UserName = user.UserName;
+				userToUpdate.Email = user.Email;
+				userToUpdate.PhoneNumber = user.PhoneNumber;
+				userToUpdate.NormalizedUserName = user.UserName.ToUpper();
+				userToUpdate.NormalizedEmail = user.Email.ToUpper();
 
-				dbContext.Softwares.Update(oldUser);
 				dbContext.SaveChanges();
+
+				var ph = userManager.PasswordHasher.HashPassword(userToUpdate, user.Password);
+				userToUpdate.PasswordHash = ph;
 
 				return Ok("OK");
 			}
 
-			return NotFound($"No software with id: {user.Id}");
-		}*/
+			return NotFound($"No software with id: {userId}");
+		}
 
 		[HttpPost("AddUser")]
 		[ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
@@ -105,13 +104,13 @@ namespace Registry_Backend.Controllers
 				AccessFailedCount = 0
 			};
 
-			var ph = aspNetUserManager.PasswordHasher.HashPassword(identityUser, user.Password);
+			var ph = userManager.PasswordHasher.HashPassword(identityUser, user.Password);
 			identityUser.PasswordHash = ph;
 
-			var resp = await aspNetUserManager.CreateAsync(identityUser);
+			var resp = await userManager.CreateAsync(identityUser);
 
 			if (resp.Succeeded)
-				Ok("OK");
+				return Ok("OK");
 			
 			throw new Exception("500");
 		}
