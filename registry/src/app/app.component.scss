@@ -35,3 +35,10 @@
   display: inline-flex;
   vertical-align: top;
 }
+
+.active {
+  span,
+  mat-icon {
+    color: #673ab7;
+  }
+}

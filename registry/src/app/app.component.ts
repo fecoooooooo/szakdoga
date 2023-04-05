@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from './shared/auth.service';
 
@@ -27,5 +27,16 @@ export class AppComponent {
 
   logout() {
     this.authService.logout();
+  }
+
+  clickNavItem(event: any) {
+    const parent = event.currentTarget.parentNode;
+    const children = parent.children;
+
+    for (let i = 0; i < children.length; i++) {
+      children[i].classList.remove('active');
+    }
+
+    event.currentTarget.classList.add('active');
   }
 }

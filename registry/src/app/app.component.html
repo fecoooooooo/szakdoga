@@ -10,32 +10,45 @@
     *ngIf="isLoggedIn()"
   >
     <mat-nav-list>
-      <mat-list-item routerLink="/manage-users" class="parent">
+      <mat-list-item
+        routerLink="/manage-users"
+        class="active"
+        (click)="clickNavItem($event)"
+      >
         <mat-icon>person</mat-icon>
         <span class="full-width"> Felhasználók</span>
       </mat-list-item>
 
-      <mat-list-item routerLink="/manage-devices" class="parent">
+      <mat-list-item
+        routerLink="/manage-devices"
+        (click)="clickNavItem($event)"
+      >
         <mat-icon>computer</mat-icon>
         <span class="full-width"> Eszközök</span>
       </mat-list-item>
 
-      <mat-list-item routerLink="/manage-softwares" class="parent">
+      <mat-list-item
+        routerLink="/manage-softwares"
+        (click)="clickNavItem($event)"
+      >
         <mat-icon>description</mat-icon>
         <span class="full-width"> Szoftverek</span>
       </mat-list-item>
 
-      <mat-list-item routerLink="/user-devices" class="parent">
+      <mat-list-item routerLink="/user-devices" (click)="clickNavItem($event)">
         <mat-icon>add_to_photos</mat-icon>
         <span class="full-width"> Felhasználó eszközei</span>
       </mat-list-item>
 
-      <mat-list-item routerLink="/user-softwares" class="parent">
+      <mat-list-item
+        routerLink="/user-softwares"
+        (click)="clickNavItem($event)"
+      >
         <mat-icon>adjust</mat-icon>
         <span class="full-width"> Felhasználó szoftverei</span>
       </mat-list-item>
 
-      <mat-list-item class="parent" (click)="logout()">
+      <mat-list-item (click)="logout()">
         <mat-icon>exit_to_app</mat-icon>
         <span class="full-width"> Kijelentkezés</span>
       </mat-list-item>
