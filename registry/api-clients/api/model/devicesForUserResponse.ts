@@ -10,7 +10,8 @@
 
 
 export interface DevicesForUserResponse { 
-    name?: string | null;
+    userName?: string | null;
+    deviceName?: string | null;
     startDate?: string;
 }
 

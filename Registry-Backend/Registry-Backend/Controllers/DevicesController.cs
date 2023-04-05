@@ -104,17 +104,17 @@ namespace Registry_Backend.Controllers
 			return NotFound($"No device with id: {id}");
 		}
 
-		[HttpGet("DevicesForUser/{id}")]
+		[HttpGet("DevicesForUser/{userId}")]
 		[ProducesResponseType(typeof(List<DevicesForUserResponse>), StatusCodes.Status200OK)]
-		public IActionResult GetHistoryForUserById([FromRoute] string id)
+		public IActionResult GetHistoryForUserById([FromRoute] string userId)
 		{
 			var histories = dbContext.DeviceHistories
-				.Where(x => x.UserId == id)
+				.Where(x => x.UserId == userId)
 				.Where(x => x.EndDate == null).ToList();
 
-			var user = dbContext.AspNetUsers.Where(x => x.Id == id).FirstOrDefault();
+			var user = dbContext.AspNetUsers.Where(x => x.Id == userId).FirstOrDefault();
 			if(user == null)
-				return NotFound($"No user with id: {id}");
+				return NotFound($"No user with id: {userId}");
 
 			List<DevicesForUserResponse> response = new List<DevicesForUserResponse>();
 			if (histories != null)
@@ -123,7 +123,8 @@ namespace Registry_Backend.Controllers
 				{
 					response.Add(new DevicesForUserResponse()
 					{
-						Name = dbContext.Devices.Where(x => x.Id == h.DeviceId).FirstOrDefault()?.Name,
+						UserName = dbContext.AspNetUsers.Where(x => x.Id == userId).FirstOrDefault()?.UserName,
+						DeviceName = dbContext.Devices.Where(x => x.Id == h.DeviceId).FirstOrDefault()?.Name,
 						StartDate = h.StartDate
 					});
 				}

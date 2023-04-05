@@ -1,1 +1,27 @@
-<p>user-softwares works!</p>
+<div class="table-container">
+  <table mat-table [dataSource]="dataSource">
+    <ng-container matColumnDef="userName">
+      <th mat-header-cell *matHeaderCellDef>Felhasználó</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.userName }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="softwareName">
+      <th mat-header-cell *matHeaderCellDef>Szoftver</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.softwareName }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="startDate">
+      <th mat-header-cell *matHeaderCellDef>Hozzárendelés kezdete</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.startDate | date : "yyyy.mm.dd HH:mm:ss" }}
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
+</div>

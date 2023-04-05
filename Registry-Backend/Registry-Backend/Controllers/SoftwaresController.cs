@@ -105,17 +105,17 @@ namespace Registry_Backend.Controllers
 			return NotFound($"No software with id: {id}");
 		}
 
-		[HttpGet("SoftwaresForUser/{id}")]
+		[HttpGet("SoftwaresForUser/{userId}")]
 		[ProducesResponseType(typeof(List<SoftwaresForUserResponse>), StatusCodes.Status200OK)]
-		public IActionResult GetHistoryForUserById([FromRoute] string id)
+		public IActionResult GetHistoryForUserById([FromRoute] string userId)
 		{
 			var histories = dbContext.SoftwareHistories
-				.Where(x => x.UserId == id)
+				.Where(x => x.UserId == userId)
 				.Where(x => x.EndDate == null).ToList();
 
-			var user = dbContext.AspNetUsers.Where(x => x.Id == id).FirstOrDefault();
+			var user = dbContext.AspNetUsers.Where(x => x.Id == userId).FirstOrDefault();
 			if (user == null)
-				return NotFound($"No user with id: {id}");
+				return NotFound($"No user with id: {userId}");
 
 			List<SoftwaresForUserResponse> response = new List<SoftwaresForUserResponse>();
 			if (histories != null)
@@ -124,7 +124,8 @@ namespace Registry_Backend.Controllers
 				{
 					response.Add(new SoftwaresForUserResponse()
 					{
-						Name = dbContext.Softwares.Where(x => x.Id == h.SoftwareId).FirstOrDefault()?.Name,
+						UserName = dbContext.AspNetUsers.Where(x => x.Id == userId).FirstOrDefault()?.UserName,
+						SoftwareName = dbContext.Softwares.Where(x => x.Id == h.SoftwareId).FirstOrDefault()?.Name,
 						StartDate = h.StartDate
 					});
 				}

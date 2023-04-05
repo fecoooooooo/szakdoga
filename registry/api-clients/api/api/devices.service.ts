@@ -343,17 +343,17 @@ export class DevicesService {
     }
 
     /**
-     * @param id 
+     * @param userId 
      * @param loaderType modify the httpContext->loaderTypeToken value
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public apiDevicesDevicesForUserIdGet(id: string, loaderType?: 'info' | 'lock' | 'default', observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<Array<DevicesForUserResponse>>;
-    public apiDevicesDevicesForUserIdGet(id: string, loaderType?: 'info' | 'lock' | 'default', observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpResponse<Array<DevicesForUserResponse>>>;
-    public apiDevicesDevicesForUserIdGet(id: string, loaderType?: 'info' | 'lock' | 'default', observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpEvent<Array<DevicesForUserResponse>>>;
-    public apiDevicesDevicesForUserIdGet(id: string, loaderType?: 'info' | 'lock' | 'default', observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<any> {
-        if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling apiDevicesDevicesForUserIdGet.');
+    public apiDevicesDevicesForUserUserIdGet(userId: string, loaderType?: 'info' | 'lock' | 'default', observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<Array<DevicesForUserResponse>>;
+    public apiDevicesDevicesForUserUserIdGet(userId: string, loaderType?: 'info' | 'lock' | 'default', observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpResponse<Array<DevicesForUserResponse>>>;
+    public apiDevicesDevicesForUserUserIdGet(userId: string, loaderType?: 'info' | 'lock' | 'default', observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpEvent<Array<DevicesForUserResponse>>>;
+    public apiDevicesDevicesForUserUserIdGet(userId: string, loaderType?: 'info' | 'lock' | 'default', observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<any> {
+        if (userId === null || userId === undefined) {
+            throw new Error('Required parameter userId was null or undefined when calling apiDevicesDevicesForUserUserIdGet.');
         }
         let lvHeaders = this.defaultHeaders;
         let lvHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
@@ -387,7 +387,7 @@ export class DevicesService {
                 responseType_ = 'blob';
             }
         }
-        let lvPath = `/api/Devices/DevicesForUser/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let lvPath = `/api/Devices/DevicesForUser/${this.configuration.encodeParam({name: "userId", value: userId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         return this.httpClient.request<Array<DevicesForUserResponse>>('get', `${this.configuration.basePath}${lvPath}`,
             {
                 context: lvHttpContext,

@@ -10,7 +10,8 @@
 
 
 export interface SoftwaresForUserResponse { 
-    name?: string | null;
+    userName?: string | null;
+    softwareName?: string | null;
     startDate?: string;
 }
 

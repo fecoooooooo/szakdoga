@@ -324,14 +324,14 @@
         }
       }
     },
-    "/api/Devices/DevicesForUser/{id}": {
+    "/api/Devices/DevicesForUser/{userId}": {
       "get": {
         "tags": [
           "Devices"
         ],
         "parameters": [
           {
-            "name": "id",
+            "name": "userId",
             "in": "path",
             "required": true,
             "style": "simple",
@@ -695,14 +695,14 @@
         }
       }
     },
-    "/api/Softwares/SoftwaresForUser/{id}": {
+    "/api/Softwares/SoftwaresForUser/{userId}": {
       "get": {
         "tags": [
           "Softwares"
         ],
         "parameters": [
           {
-            "name": "id",
+            "name": "userId",
             "in": "path",
             "required": true,
             "style": "simple",
@@ -1036,7 +1036,11 @@
       "DevicesForUserResponse": {
         "type": "object",
         "properties": {
-          "name": {
+          "userName": {
+            "type": "string",
+            "nullable": true
+          },
+          "deviceName": {
             "type": "string",
             "nullable": true
           },
@@ -1177,7 +1181,11 @@
       "SoftwaresForUserResponse": {
         "type": "object",
         "properties": {
-          "name": {
+          "userName": {
+            "type": "string",
+            "nullable": true
+          },
+          "softwareName": {
             "type": "string",
             "nullable": true
           },

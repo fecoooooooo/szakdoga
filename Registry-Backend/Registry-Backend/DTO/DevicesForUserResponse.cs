@@ -2,7 +2,8 @@
 {
 	public class DevicesForUserResponse
 	{
-		public string? Name { get; set; } = null!;
+		public string? UserName { get; set; } = null!;
+		public string? DeviceName { get; set; } = null!;
 		public DateTime StartDate { get; set; }
 
 	}

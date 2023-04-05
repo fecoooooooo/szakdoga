@@ -2,7 +2,8 @@
 {
 	public class SoftwaresForUserResponse
 	{
-		public string? Name { get; set; } = null!;
+		public string? UserName { get; set; } = null!;
+		public string? SoftwareName { get; set; } = null!;
 		public DateTime StartDate { get; set; }
 
 	}

@@ -14,10 +14,16 @@ export class AuthService {
 
   login() {
     localStorage.setItem('token', 'akarmi');
+    localStorage.setItem('id', '1');
   }
 
   logout() {
     localStorage.removeItem('token');
+    localStorage.removeItem('id');
     this.router.navigate([`/`]);
+  }
+
+  getUserId(): string | null {
+    return localStorage.getItem('id');
   }
 }
