@@ -17,19 +17,12 @@ import { ConfirmationModalComponent } from 'src/app/shared/confirmation-modal/co
   styleUrls: ['./list-users.component.scss'],
 })
 export class ListUsersComponent {
-  displayedColumns: string[] = [
-    'id',
-    'userName',
-    'email',
-    'phoneNumber',
-    'roles',
-  ];
+  displayedColumns: string[] = ['id', 'userName', 'email', 'phone', 'actions'];
   dataSource = new MatTableDataSource<IdentityUser>();
 
   users: IdentityUser[] | null = null;
 
   constructor(
-    private devicesService: DevicesService,
     private matDialog: MatDialog,
     private router: Router,
     private route: ActivatedRoute,
@@ -37,8 +30,8 @@ export class ListUsersComponent {
   ) {}
 
   ngOnInit(): void {
-    this.usersService.allUsersGet().subscribe((r) => {
-      this.dataSource = new MatTableDataSource<IdentityUser>(r);
+    this.usersService.allUsersGet().subscribe((result) => {
+      this.dataSource = new MatTableDataSource<IdentityUser>(result);
     });
   }
 
@@ -50,18 +43,18 @@ export class ListUsersComponent {
     this.router.navigate([`./edit-user/${id}`], { relativeTo: this.route });
   }
 
-  delete(id: number) {
+  delete(id: string) {
     const dialogRef = this.matDialog.open(ConfirmationModalComponent, {
       width: '400px',
     });
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result === true) {
+        this.usersService.deleteIdDelete(id).subscribe((r) => {
+          let temp = this.dataSource.data.filter((x) => x.id != id);
+          this.dataSource.data = temp;
+        });
       }
     });
-  }
-
-  getUserName(userId: string) {
-    return this.users?.find((x) => x.id === userId)?.userName;
   }
 }

@@ -1,1 +1,68 @@
-<p>edit-user works!</p>
+<div class="container">
+  <button mat-raised-button class="mb-5" (click)="cancel()">Vissza</button>
+
+  <div class="row">
+    <form
+      [formGroup]="form"
+      *ngIf="isCreate || (!isCreate && userDataRecieved)"
+    >
+      <mat-form-field class="col-12">
+        <mat-label>Felhasználó</mat-label>
+        <input matInput type="text" [formControl]="userNameControl" />
+        <mat-error>Kötelező</mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="col-12">
+        <mat-label>Email</mat-label>
+        <input matInput type="email" [formControl]="emailControl" />
+        <mat-error>Kötelező</mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="col-12">
+        <mat-label>Telefon</mat-label>
+        <input matInput type="text" [formControl]="phoneControl" />
+        <mat-error>Kötelező</mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="col-12">
+        <mat-label>Jelszó</mat-label>
+        <input
+          matInput
+          type="password"
+          [formControl]="passwordControl"
+          (keyup)="passwordKeyup()"
+        />
+        <mat-error>Kötelező</mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="col-12">
+        <mat-label>Jelszó újra</mat-label>
+        <input
+          matInput
+          type="password"
+          [formControl]="passwordAgainControl"
+          (keyup)="passwordConfirmKeyup()"
+        />
+        <mat-error
+          *ngIf="
+            passwordControl.errors?.['differentPasswords'] ||
+            passwordAgainControl.errors?.['differentPasswords']
+          "
+          >A két jelszónak egyeznie kell</mat-error
+        >
+        <mat-error>Kötelező</mat-error>
+      </mat-form-field>
+
+      <div class="col-12">
+        <button
+          mat-raised-button
+          color="primary"
+          class="mt-2 text-right"
+          (click)="onSubmit()"
+        >
+          Mentés
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

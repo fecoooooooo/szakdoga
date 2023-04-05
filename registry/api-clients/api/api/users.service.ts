@@ -333,4 +333,74 @@ export class UsersService {
         );
     }
 
+    /**
+     * @param userId 
+     * @param userRequest 
+     * @param loaderType modify the httpContext->loaderTypeToken value
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public updateUserUserIdPatch(userId: string, userRequest?: UserRequest, loaderType?: 'info' | 'lock' | 'default', observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<string>;
+    public updateUserUserIdPatch(userId: string, userRequest?: UserRequest, loaderType?: 'info' | 'lock' | 'default', observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpResponse<string>>;
+    public updateUserUserIdPatch(userId: string, userRequest?: UserRequest, loaderType?: 'info' | 'lock' | 'default', observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpEvent<string>>;
+    public updateUserUserIdPatch(userId: string, userRequest?: UserRequest, loaderType?: 'info' | 'lock' | 'default', observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<any> {
+        if (userId === null || userId === undefined) {
+            throw new Error('Required parameter userId was null or undefined when calling updateUserUserIdPatch.');
+        }
+        let lvHeaders = this.defaultHeaders;
+        let lvHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (lvHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'text/plain',
+                'application/json',
+                'text/json'
+            ];
+            lvHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (lvHttpHeaderAcceptSelected !== undefined) {
+            lvHeaders = lvHeaders.set('Accept', lvHttpHeaderAcceptSelected);
+        }
+        let lvHttpContext: HttpContext | undefined;
+        lvHttpContext = options && options.context;
+        if (lvHttpContext === undefined) {
+            lvHttpContext = new HttpContext();
+        }
+        if(this.loaderTypeToken) {
+            lvHttpContext.set(this.loaderTypeToken, loaderType === undefined || loaderType === null ? 'default' : loaderType);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json',
+            'text/json',
+            'application/*+json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            lvHeaders = lvHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (lvHttpHeaderAcceptSelected) {
+            if (lvHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(lvHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+        let lvPath = `/UpdateUser/${this.configuration.encodeParam({name: "userId", value: userId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        return this.httpClient.request<string>('patch', `${this.configuration.basePath}${lvPath}`,
+            {
+                context: lvHttpContext,
+                body: userRequest,
+                responseType: <any>responseType_,
+                headers: lvHeaders,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
 }

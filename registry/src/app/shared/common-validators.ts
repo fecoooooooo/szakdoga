@@ -16,4 +16,19 @@ export namespace CommonValidators {
       return null;
     };
   }
+
+  export function validatePasswordMatch(
+    comparedControl: AbstractControl
+  ): ValidatorFn {
+    return (actualControl: AbstractControl): ValidationErrors | null => {
+      const actualPassword = actualControl.value as string;
+      const comparedPassword = comparedControl.value as string;
+
+      if (actualPassword !== comparedPassword) {
+        return { differentPasswords: true };
+      }
+
+      return null;
+    };
+  }
 }
