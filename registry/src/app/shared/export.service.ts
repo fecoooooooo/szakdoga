@@ -37,10 +37,11 @@ export class ExportService {
     nameOfPdf: string,
     columnsToRemoveAtTheEnd: number = 0
   ) {
+    /*
     if (table !== undefined) {
       const doc = new jsPDF();
 
-      autoTable(doc, {
+      /*autoTable(doc, {
         head: [['ID', 'Country', 'Index', 'Capital']],
         body: [
           [1, 'Finland', 7.632, 'Helsinki'],
@@ -54,6 +55,6 @@ export class ExportService {
       });
 
       doc.save(`${nameOfPdf}.pdf`);
-    }
+    }*/
   }
 }
