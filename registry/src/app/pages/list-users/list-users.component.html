@@ -2,6 +2,14 @@
   <div class="header-buttons-container">
     <div class="header-buttons">
       <button mat-raised-button (click)="add()" color="primary">Új</button>
+      <div class="header-buttons-right">
+        <button mat-raised-button color="accent" (click)="ExportToExcel()">
+          Excel
+        </button>
+        <button mat-raised-button color="accent" (click)="ExportToExcel()">
+          Pdf
+        </button>
+      </div>
     </div>
   </div>
   <table mat-table [dataSource]="dataSource" #table>
@@ -40,7 +48,4 @@
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
   </table>
-  <button mat-raised-button color="primary" (click)="ExportToExcel()">
-    Export as Excel
-  </button>
 </div>

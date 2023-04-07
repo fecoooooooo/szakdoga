@@ -10,6 +10,7 @@ import {
 } from 'api-clients/api';
 import { forkJoin } from 'rxjs';
 import { ConfirmationModalComponent } from 'src/app/shared/confirmation-modal/confirmation-modal.component';
+import { ExportService } from 'src/app/shared/export.service';
 import * as XLSX from 'xlsx';
 
 @Component({
@@ -29,7 +30,8 @@ export class ListUsersComponent {
     private matDialog: MatDialog,
     private router: Router,
     private route: ActivatedRoute,
-    private usersService: UsersService
+    private usersService: UsersService,
+    private exportService: ExportService
   ) {}
 
   ngOnInit(): void {
@@ -62,15 +64,6 @@ export class ListUsersComponent {
   }
 
   ExportToExcel() {
-    if (this.table !== undefined) {
-      const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(
-        this.table.nativeElement
-      );
-      const wb: XLSX.WorkBook = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-
-      /* save to file */
-      XLSX.writeFile(wb, 'SheetJS.xlsx');
-    }
+    this.exportService.tableToExcel(this.table, 'Felhasználók', 1);
   }
 }
