@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -12,6 +12,7 @@ import {
 } from 'api-clients/api';
 import { forkJoin } from 'rxjs';
 import { ConfirmationModalComponent } from 'src/app/shared/confirmation-modal/confirmation-modal.component';
+import { ExportService } from 'src/app/shared/export.service';
 
 @Component({
   selector: 'app-list-softwares',
@@ -31,7 +32,7 @@ export class ListSoftwaresComponent {
     'actions',
   ];
   dataSource = new MatTableDataSource<Software>();
-
+  @ViewChild('TABLE') table: ElementRef | undefined;
   users: IdentityUser[] | null = null;
 
   constructor(
@@ -39,7 +40,8 @@ export class ListSoftwaresComponent {
     private matDialog: MatDialog,
     private router: Router,
     private route: ActivatedRoute,
-    private usersService: UsersService
+    private usersService: UsersService,
+    private exportService: ExportService
   ) {}
 
   ngOnInit(): void {
@@ -83,5 +85,9 @@ export class ListSoftwaresComponent {
 
   getUserName(userId: string) {
     return this.users?.find((x) => x.id === userId)?.userName;
+  }
+
+  exportToExcel() {
+    this.exportService.tableToExcel(this.table, 'Szoftverek', 1);
   }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -10,6 +10,7 @@ import {
   UsersService,
 } from 'api-clients/api';
 import { forkJoin } from 'rxjs';
+import { ExportService } from 'src/app/shared/export.service';
 
 @Component({
   selector: 'app-device-history',
@@ -22,12 +23,14 @@ export class DeviceHistoryComponent {
 
   users: IdentityUser[] | null = null;
   devices: Device[] | null = null;
+  @ViewChild('TABLE') table: ElementRef | undefined;
 
   constructor(
     private devicesService: DevicesService,
     private router: Router,
     private route: ActivatedRoute,
-    private usersService: UsersService
+    private usersService: UsersService,
+    private exportService: ExportService
   ) {}
 
   ngOnInit(): void {
@@ -54,5 +57,9 @@ export class DeviceHistoryComponent {
 
   cancel() {
     this.router.navigate([`/manage-devices`]);
+  }
+
+  exportToExcel() {
+    this.exportService.tableToExcel(this.table, 'Eszköz történet', 1);
   }
 }

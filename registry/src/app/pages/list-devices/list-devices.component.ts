@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -10,6 +10,7 @@ import {
 } from 'api-clients/api';
 import { forkJoin } from 'rxjs';
 import { ConfirmationModalComponent } from 'src/app/shared/confirmation-modal/confirmation-modal.component';
+import { ExportService } from 'src/app/shared/export.service';
 
 @Component({
   selector: 'app-list-devices',
@@ -29,6 +30,7 @@ export class ListDevicesComponent implements OnInit {
     'actions',
   ];
   dataSource = new MatTableDataSource<Device>();
+  @ViewChild('TABLE') table: ElementRef | undefined;
 
   users: IdentityUser[] | null = null;
 
@@ -37,7 +39,8 @@ export class ListDevicesComponent implements OnInit {
     private matDialog: MatDialog,
     private router: Router,
     private route: ActivatedRoute,
-    private usersService: UsersService
+    private usersService: UsersService,
+    private exportService: ExportService
   ) {}
 
   ngOnInit(): void {
@@ -81,5 +84,9 @@ export class ListDevicesComponent implements OnInit {
 
   getUserName(userId: string) {
     return this.users?.find((x) => x.id === userId)?.userName;
+  }
+
+  exportToExcel() {
+    this.exportService.tableToExcel(this.table, 'Eszközök', 1);
   }
 }

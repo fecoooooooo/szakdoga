@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import {
   DevicesForUserResponse,
@@ -7,6 +7,7 @@ import {
   SoftwaresService,
 } from 'api-clients/api';
 import { AuthService } from 'src/app/shared/auth.service';
+import { ExportService } from 'src/app/shared/export.service';
 
 @Component({
   selector: 'app-user-softwares',
@@ -17,9 +18,12 @@ export class UserSoftwaresComponent {
   displayedColumns: string[] = ['userName', 'softwareName', 'startDate'];
   dataSource = new MatTableDataSource<SoftwaresForUserResponse>();
 
+  @ViewChild('TABLE') table: ElementRef | undefined;
+
   constructor(
     private softwaresService: SoftwaresService,
-    private authService: AuthService
+    private authService: AuthService,
+    private exportService: ExportService
   ) {}
   ngOnInit(): void {
     let userId: string | null = this.authService.getUserId();
@@ -31,5 +35,9 @@ export class UserSoftwaresComponent {
           this.dataSource.data = result;
         });
     }
+  }
+
+  exportToExcel() {
+    this.exportService.tableToExcel(this.table, 'Felhasználó szoftverei', 1);
   }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -10,6 +10,7 @@ import {
   UsersService,
 } from 'api-clients/api';
 import { forkJoin } from 'rxjs';
+import { ExportService } from 'src/app/shared/export.service';
 
 @Component({
   selector: 'app-software-history',
@@ -29,11 +30,14 @@ export class SoftwareHistoryComponent {
   users: IdentityUser[] | null = null;
   softwares: Software[] | null = null;
 
+  @ViewChild('TABLE') table: ElementRef | undefined;
+
   constructor(
     private softwaresService: SoftwaresService,
     private router: Router,
     private route: ActivatedRoute,
-    private usersService: UsersService
+    private usersService: UsersService,
+    private exportService: ExportService
   ) {}
 
   ngOnInit(): void {
@@ -60,5 +64,9 @@ export class SoftwareHistoryComponent {
 
   cancel() {
     this.router.navigate([`/manage-softwares`]);
+  }
+
+  exportToExcel() {
+    this.exportService.tableToExcel(this.table, 'Szoftver történet', 1);
   }
 }
