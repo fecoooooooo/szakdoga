@@ -1,10 +1,13 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Registry_Backend.DTO;
 using Registry_Backend.Models;
 
 namespace Registry_Backend.Controllers
 {
+	[ApiController, Authorize]
+	[Route("api/[controller]")]
 	public class UsersController : ControllerBase
 	{
 		private readonly RegistryContext dbContext;

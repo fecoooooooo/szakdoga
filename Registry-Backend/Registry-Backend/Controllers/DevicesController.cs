@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Registry_Backend.DTO;
@@ -7,7 +8,7 @@ using System.Net;
 
 namespace Registry_Backend.Controllers
 {
-	[ApiController]
+	[ApiController, Authorize]
 	[Route("api/[controller]")]
 	public class DevicesController : ControllerBase
 	{

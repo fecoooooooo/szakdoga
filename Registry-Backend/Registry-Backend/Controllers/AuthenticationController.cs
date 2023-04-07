@@ -1,6 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
+using Registry_Backend.DTO;
 using Registry_Backend.Models;
+using Registry_Backend.Shared;
+using System.IdentityModel.Tokens.Jwt;
 using System.Net;
+using System.Security.Claims;
+using System.Text;
 
 namespace Registry_Backend.Controllers
 {
@@ -13,6 +20,31 @@ namespace Registry_Backend.Controllers
 		public AuthenticationController(RegistryContext dbContext)
 		{
 			this.dbContext = dbContext;
+		}
+
+		[HttpPost("Login")]
+		public IActionResult Login([FromBody] LoginData loginData)
+		{
+			if (loginData is null)
+			{
+				return BadRequest("Invalid user request!!!");
+			}
+			if (loginData.UserName == "string" && loginData.Password == "string")
+			{
+				var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(ConfigurationManagerExtension.AppSetting["JWT:Secret"]));
+				var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
+				var tokeOptions = new JwtSecurityToken(
+					issuer: ConfigurationManagerExtension.AppSetting["JWT:ValidIssuer"], 
+					audience: ConfigurationManagerExtension.AppSetting["JWT:ValidAudience"], claims: new List<Claim>(), 
+					expires: DateTime.Now.AddMinutes(6), 
+					signingCredentials: signinCredentials);
+				var tokenString = new JwtSecurityTokenHandler().WriteToken(tokeOptions);
+				return Ok(new JWTTokenResponse
+				{
+					Token = tokenString
+				});
+			}
+			return Unauthorized();
 		}
 
 		[HttpGet("DEBUG_GenerateSwaggerJson")]
