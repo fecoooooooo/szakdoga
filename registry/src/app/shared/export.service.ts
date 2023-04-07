@@ -1,4 +1,4 @@
-import { ElementRef, Injectable } from '@angular/core';
+import { ElementRef, Injectable, ViewChild } from '@angular/core';
 import * as XLSX from 'xlsx';
 
 @Injectable({
@@ -29,6 +29,31 @@ export class ExportService {
       XLSX.utils.book_append_sheet(wb, modifiedWs, 'Sheet1');
 
       XLSX.writeFile(wb, `${nameOfExcel}.xlsx`);
+    }
+  }
+
+  tableToPdf(
+    table: ElementRef | undefined,
+    nameOfPdf: string,
+    columnsToRemoveAtTheEnd: number = 0
+  ) {
+    if (table !== undefined) {
+      const doc = new jsPDF();
+
+      autoTable(doc, {
+        head: [['ID', 'Country', 'Index', 'Capital']],
+        body: [
+          [1, 'Finland', 7.632, 'Helsinki'],
+          [2, 'Norway', 7.594, 'Oslo'],
+          [3, 'Denmark', 7.555, 'Copenhagen'],
+          [4, 'Iceland', 7.495, 'Reykjavík'],
+          [5, 'Switzerland', 7.487, 'Bern'],
+          [9, 'Sweden', 7.314, 'Stockholm'],
+          [73, 'Belarus', 5.483, 'Minsk'],
+        ],
+      });
+
+      doc.save(`${nameOfPdf}.pdf`);
     }
   }
 }

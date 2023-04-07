@@ -63,7 +63,10 @@ export class ListUsersComponent {
     });
   }
 
-  ExportToExcel() {
+  exportToExcel() {
     this.exportService.tableToExcel(this.table, 'Felhasználók', 1);
+  }
+  exportToPdf() {
+    this.exportService.tableToPdf(this.table, 'Felhasználók', 1);
   }
 }
