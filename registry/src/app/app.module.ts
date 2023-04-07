@@ -35,7 +35,7 @@ import {
 import { MatTableModule } from '@angular/material/table';
 import { BooleanToHunPipe } from './shared/boolean-to-hun.pipe';
 import { ToastrModule } from 'ngx-toastr';
-import { RequestInterceptor } from './shared/request-interceptor';
+import { RequestInterceptor } from './shared/request.interceptor';
 import { ConfirmationModalComponent } from './shared/confirmation-modal/confirmation-modal.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSelectModule } from '@angular/material/select';
@@ -89,6 +89,11 @@ import { SoftwareHistoryComponent } from './pages/software-history/software-hist
     UsersService,
     AuthenticationService,
     { provide: HTTP_INTERCEPTORS, useClass: RequestInterceptor, multi: true },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthenticationService,
+      multi: true,
+    },
   ],
   bootstrap: [AppComponent],
 })
