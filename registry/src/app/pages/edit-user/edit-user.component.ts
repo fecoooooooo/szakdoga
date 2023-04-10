@@ -63,7 +63,7 @@ export class EditUserComponent {
     this.isCreate = id === null;
 
     if (id !== null) {
-      this.usersService.singleIdGet(id).subscribe((currentUser) => {
+      this.usersService.apiUsersSingleIdGet(id).subscribe((currentUser) => {
         if (currentUser !== undefined) {
           this.userNameControl.setValue(currentUser.userName);
           this.phoneControl.setValue(currentUser.phoneNumber);
@@ -89,12 +89,12 @@ export class EditUserComponent {
       };
 
       if (this.isCreate) {
-        this.usersService.addUserPost(user).subscribe((r) => {
+        this.usersService.apiUsersAddUserPost(user).subscribe((r) => {
           this.router.navigate([`/manage-users`]);
         });
       } else {
         this.usersService
-          .updateUserUserIdPatch(this.userId!, user)
+          .apiUsersUpdateUserUserIdPatch(this.userId!, user)
           .subscribe((r) => {
             this.router.navigate([`/manage-users`]);
           });

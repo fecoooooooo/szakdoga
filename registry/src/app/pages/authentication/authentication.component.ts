@@ -39,6 +39,9 @@ export class AuthenticationComponent {
   }
 
   login() {
-    this.authService.login();
+    const userName = this.usernameControl.value;
+    const password = this.passwordControl.value;
+
+    this.authService.login(userName, password);
   }
 }

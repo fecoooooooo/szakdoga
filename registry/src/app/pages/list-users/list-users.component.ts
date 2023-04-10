@@ -35,7 +35,7 @@ export class ListUsersComponent {
   ) {}
 
   ngOnInit(): void {
-    this.usersService.allUsersGet().subscribe((result) => {
+    this.usersService.apiUsersAllUsersGet().subscribe((result) => {
       this.dataSource = new MatTableDataSource<IdentityUser>(result);
     });
   }
@@ -55,7 +55,7 @@ export class ListUsersComponent {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result === true) {
-        this.usersService.deleteIdDelete(id).subscribe((r) => {
+        this.usersService.apiUsersDeleteIdDelete(id).subscribe((r) => {
           let temp = this.dataSource.data.filter((x) => x.id != id);
           this.dataSource.data = temp;
         });

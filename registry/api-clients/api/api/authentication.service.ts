@@ -16,6 +16,8 @@ import { HttpClient, HttpHeaders, HttpParams, HttpContextToken,
 import { CustomHttpParameterCodec }                          from '../encoder';
 import { Observable }                                        from 'rxjs';
 
+// @ts-ignore
+import { LoginData } from '../model/loginData';
 
 // @ts-ignore
 import { BASE_PATH, LOADER_TYPE_TOKEN, COLLECTION_FORMATS }                     from '../variables';
@@ -241,6 +243,69 @@ export class AuthenticationService {
         return this.httpClient.request<string>('get', `${this.configuration.basePath}${lvPath}`,
             {
                 context: lvHttpContext,
+                responseType: <any>responseType_,
+                headers: lvHeaders,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * @param loginData 
+     * @param loaderType modify the httpContext->loaderTypeToken value
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public apiAuthenticationLoginPost(loginData?: LoginData, loaderType?: 'info' | 'lock' | 'default', observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any>;
+    public apiAuthenticationLoginPost(loginData?: LoginData, loaderType?: 'info' | 'lock' | 'default', observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpResponse<any>>;
+    public apiAuthenticationLoginPost(loginData?: LoginData, loaderType?: 'info' | 'lock' | 'default', observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpEvent<any>>;
+    public apiAuthenticationLoginPost(loginData?: LoginData, loaderType?: 'info' | 'lock' | 'default', observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any> {
+        let lvHeaders = this.defaultHeaders;
+        let lvHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (lvHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+            ];
+            lvHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (lvHttpHeaderAcceptSelected !== undefined) {
+            lvHeaders = lvHeaders.set('Accept', lvHttpHeaderAcceptSelected);
+        }
+        let lvHttpContext: HttpContext | undefined;
+        lvHttpContext = options && options.context;
+        if (lvHttpContext === undefined) {
+            lvHttpContext = new HttpContext();
+        }
+        if(this.loaderTypeToken) {
+            lvHttpContext.set(this.loaderTypeToken, loaderType === undefined || loaderType === null ? 'default' : loaderType);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json',
+            'text/json',
+            'application/*+json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            lvHeaders = lvHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (lvHttpHeaderAcceptSelected) {
+            if (lvHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(lvHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+        let lvPath = `/api/Authentication/Login`;
+        return this.httpClient.request<any>('post', `${this.configuration.basePath}${lvPath}`,
+            {
+                context: lvHttpContext,
+                body: loginData,
                 responseType: <any>responseType_,
                 headers: lvHeaders,
                 observe: observe,

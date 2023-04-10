@@ -42,6 +42,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { DeviceHistoryComponent } from './pages/device-history/device-history.component';
 import { SoftwareHistoryComponent } from './pages/software-history/software-history.component';
+import { AuthenticationInterceptor } from './shared/authentication.interceptor';
 
 @NgModule({
   declarations: [
@@ -91,7 +92,7 @@ import { SoftwareHistoryComponent } from './pages/software-history/software-hist
     { provide: HTTP_INTERCEPTORS, useClass: RequestInterceptor, multi: true },
     {
       provide: HTTP_INTERCEPTORS,
-      useClass: AuthenticationService,
+      useClass: AuthenticationInterceptor,
       multi: true,
     },
   ],

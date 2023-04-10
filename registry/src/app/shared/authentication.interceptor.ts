@@ -1,28 +1,42 @@
 import {
-  HttpEvent,
-  HttpHandler,
-  HttpInterceptor,
   HttpRequest,
+  HttpHandler,
+  HttpEvent,
+  HttpInterceptor,
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { AuthenticationService } from 'api-clients/api/api/authentication.service';
-import { environment } from 'environtments/environment';
 import { Observable } from 'rxjs';
+import { AuthService } from './auth.service';
+import { environment } from 'environtments/environment';
 
 @Injectable()
 export class AuthenticationInterceptor implements HttpInterceptor {
-  constructor(private authenticationService: AuthenticationService) {}
+  constructor(private authService: AuthService) {}
 
   intercept(
     request: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
     // Modify the request object here
-    const modifiedRequest = request.clone({
-      headers: request.headers.set('Authorization', 'Bearer your-auth-token'),
-    });
 
-    // Pass the modified request on to the next interceptor or to the HttpHandler if this is the last interceptor in the chain
-    return next.handle(modifiedRequest);
+    const isApiUrl = request.url.startsWith(environment.apiUrl);
+    const isLoggedIn = this.authService.isLoggedIn();
+
+    console.log(environment.apiUrl);
+    console.log(request.url);
+    console.log(isApiUrl);
+    console.log(isLoggedIn);
+    console.log(this.authService.getToken()!);
+
+    if (isLoggedIn && isApiUrl) {
+      request = request.clone({
+        headers: request.headers.set(
+          'Authorization',
+          this.authService.getToken()!
+        ),
+      });
+    }
+
+    return next.handle(request);
   }
 }

@@ -46,7 +46,7 @@ export class ListDevicesComponent implements OnInit {
   ngOnInit(): void {
     forkJoin({
       devices: this.devicesService.apiDevicesAllDevicesGet(),
-      users: this.usersService.allUsersGet(),
+      users: this.usersService.apiUsersAllUsersGet(),
     }).subscribe((result) => {
       this.dataSource = new MatTableDataSource<Device>(result.devices);
       this.users = result.users;

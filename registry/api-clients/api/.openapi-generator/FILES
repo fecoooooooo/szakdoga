@@ -14,6 +14,7 @@ model/device.ts
 model/deviceHistory.ts
 model/devicesForUserResponse.ts
 model/identityUser.ts
+model/loginData.ts
 model/models.ts
 model/software.ts
 model/softwareHistory.ts
