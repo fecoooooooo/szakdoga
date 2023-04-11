@@ -32,7 +32,7 @@ export class AuthenticationInterceptor implements HttpInterceptor {
       request = request.clone({
         headers: request.headers.set(
           'Authorization',
-          this.authService.getToken()!
+          'Bearer ' + this.authService.getToken()!
         ),
       });
     }
