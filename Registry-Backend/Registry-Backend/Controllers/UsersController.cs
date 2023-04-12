@@ -34,12 +34,21 @@ namespace Registry_Backend.Controllers
 
 
 		[HttpGet("Single/{id}")]
-		[ProducesResponseType(typeof(IdentityUser), StatusCodes.Status200OK)]
+		[ProducesResponseType(typeof(UserResponse), StatusCodes.Status200OK)]
 		public async Task<IActionResult> GetUserById([FromRoute] string id)
 		{
 			var user = await userManager.FindByIdAsync(id);
+			
 			if (user != null)
-				return Ok(user);
+			{
+				var role = (await userManager.GetRolesAsync(user)).FirstOrDefault();
+
+				return Ok(new UserResponse()
+				{
+					User = user,
+					Role = role
+				});
+			}
 
 			return NotFound($"No User with id: {id}");
 		}
@@ -141,8 +150,8 @@ namespace Registry_Backend.Controllers
 			else throw new ApplicationException(resp.Errors.FirstOrDefault()?.Description);
 		}
 
-		[HttpPost("GetAllRoles")]
-		[ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+		[HttpGet("GetAllRoles")]
+		[ProducesResponseType(typeof(List<IdentityRole>), StatusCodes.Status200OK)]
 		public IActionResult GetAllRoles()
 		{
 			var result = roleManager.Roles.ToList();

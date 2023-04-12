@@ -6,7 +6,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { UserRequest, UsersService } from 'api-clients/api';
+import { IdentityRole, UserRequest, UsersService } from 'api-clients/api';
 import { CommonValidators } from 'src/app/shared/common-validators';
 
 @Component({
@@ -25,8 +25,11 @@ export class EditUserComponent {
   userNameControl: FormControl;
   phoneControl: FormControl;
   emailControl: FormControl;
+  roleControl: FormControl;
   passwordControl: FormControl;
   passwordAgainControl: FormControl;
+
+  roles: IdentityRole[] | null = null;
 
   constructor(
     private route: ActivatedRoute,
@@ -47,6 +50,10 @@ export class EditUserComponent {
         null,
         Validators.required
       )),
+      roleControl: (this.roleControl = new FormControl(
+        null,
+        Validators.required
+      )),
       passwordControl: (this.passwordControl = new FormControl(
         null,
         Validators.required
@@ -62,19 +69,23 @@ export class EditUserComponent {
     let id: string | null = this.route.snapshot.paramMap.get('id');
     this.isCreate = id === null;
 
-    if (id !== null) {
-      this.usersService.apiUsersSingleIdGet(id).subscribe((currentUser) => {
-        if (currentUser !== undefined) {
-          this.userNameControl.setValue(currentUser.userName);
-          this.phoneControl.setValue(currentUser.phoneNumber);
-          this.emailControl.setValue(currentUser.email);
+    this.usersService.apiUsersGetAllRolesGet().subscribe((r) => {
+      this.roles = r;
+      if (id !== null) {
+        this.usersService.apiUsersSingleIdGet(id).subscribe((currentUser) => {
+          if (currentUser.user !== undefined) {
+            this.userNameControl.setValue(currentUser.user.userName);
+            this.phoneControl.setValue(currentUser.user.phoneNumber);
+            this.emailControl.setValue(currentUser.user.email);
+            this.roleControl.setValue(currentUser.role);
 
-          this.userDataRecieved = true;
+            this.userDataRecieved = true;
 
-          this.userId = id!;
-        }
-      });
-    }
+            this.userId = id!;
+          }
+        });
+      }
+    });
   }
 
   onSubmit() {
@@ -85,6 +96,7 @@ export class EditUserComponent {
         userName: this.userNameControl.value,
         phoneNumber: this.phoneControl.value,
         email: this.emailControl.value,
+        role: this.roleControl.value,
         password: this.passwordControl.value,
       };
 

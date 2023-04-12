@@ -14,6 +14,7 @@ index.ts
 model/device.ts
 model/deviceHistory.ts
 model/devicesForUserResponse.ts
+model/identityRole.ts
 model/identityUser.ts
 model/jWTTokenResponse.ts
 model/loginData.ts
@@ -22,5 +23,6 @@ model/software.ts
 model/softwareHistory.ts
 model/softwaresForUserResponse.ts
 model/userRequest.ts
+model/userResponse.ts
 param.ts
 variables.ts

@@ -1,6 +1,7 @@
 export * from './device';
 export * from './deviceHistory';
 export * from './devicesForUserResponse';
+export * from './identityRole';
 export * from './identityUser';
 export * from './jWTTokenResponse';
 export * from './loginData';
@@ -8,3 +9,4 @@ export * from './software';
 export * from './softwareHistory';
 export * from './softwaresForUserResponse';
 export * from './userRequest';
+export * from './userResponse';

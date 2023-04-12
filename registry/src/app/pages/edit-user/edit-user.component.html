@@ -25,6 +25,16 @@
       </mat-form-field>
 
       <mat-form-field class="col-12">
+        <mat-label>Szerepkör</mat-label>
+        <mat-select matInput [formControl]="roleControl">
+          <mat-option *ngFor="let r of roles" [value]="r.name">
+            {{ r.name }}
+          </mat-option>
+        </mat-select>
+        <mat-error>Kötelező</mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="col-12">
         <mat-label>Jelszó</mat-label>
         <input
           matInput
