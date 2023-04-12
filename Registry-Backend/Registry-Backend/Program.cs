@@ -35,7 +35,7 @@ builder.Services.AddSwaggerGen(options => {
 						Type = ReferenceType.SecurityScheme
 				}
 			},
-			new List < string > ()
+			new List <string> ()
 		}
 	});
 });

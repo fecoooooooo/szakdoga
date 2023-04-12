@@ -44,21 +44,27 @@ namespace Registry_Backend.Controllers
 				if (result.Succeeded)
 				{
 					var user = await userManager.FindByNameAsync(loginData.UserName);
-
 					if (user != null) {
-						var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(ConfigurationManagerExtension.AppSetting["JWT:Secret"]));
-						var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
-						var tokeOptions = new JwtSecurityToken(
-							issuer: ConfigurationManagerExtension.AppSetting["JWT:ValidIssuer"],
-							audience: ConfigurationManagerExtension.AppSetting["JWT:ValidAudience"], claims: new List<Claim>(),
-							expires: DateTime.Now.AddMinutes(6),
-							signingCredentials: signinCredentials);
-						var tokenString = new JwtSecurityTokenHandler().WriteToken(tokeOptions);
-						return Ok(new JWTTokenResponse
-						{
-							Token = tokenString,
-							UserId = user.Id
-						});
+
+						var role = (await userManager.GetRolesAsync(user)).FirstOrDefault();
+						if (role != null) {
+
+							var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(ConfigurationManagerExtension.AppSetting["JWT:Secret"]));
+							var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
+							var tokeOptions = new JwtSecurityToken(
+								issuer: ConfigurationManagerExtension.AppSetting["JWT:ValidIssuer"],
+								audience: ConfigurationManagerExtension.AppSetting["JWT:ValidAudience"], 
+								claims: new List<Claim>() { new Claim(ClaimTypes.Role, role) },
+								expires: DateTime.Now.AddDays(100),
+								signingCredentials: signinCredentials);
+							var tokenString = new JwtSecurityTokenHandler().WriteToken(tokeOptions);
+							return Ok(new JWTTokenResponse
+							{
+								Token = tokenString,
+								UserId = user.Id,
+								Role = role
+							});
+						}
 					}
 				}
 			}
