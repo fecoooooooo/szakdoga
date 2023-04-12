@@ -6,7 +6,7 @@ using Registry_Backend.Models;
 
 namespace Registry_Backend.Controllers
 {
-	[ApiController, Authorize]
+	[ApiController, /*TODO Authorize*/]
 	[Route("api/[controller]")]
 	public class UsersController : ControllerBase
 	{
@@ -95,16 +95,16 @@ namespace Registry_Backend.Controllers
 				NormalizedUserName = user.UserName.ToUpper(),
 				Email = user.Email,
 				NormalizedEmail = user.Email.ToUpper(),
-				EmailConfirmed = false,
+				EmailConfirmed = true,
 				PasswordHash = null,
 				SecurityStamp = null,
 				ConcurrencyStamp = null,
 				PhoneNumber = user.PhoneNumber,
-				PhoneNumberConfirmed = false,
+				PhoneNumberConfirmed = true,
 				TwoFactorEnabled = false,
 				LockoutEnd = null,
 				LockoutEnabled = false,
-				AccessFailedCount = 0
+				AccessFailedCount = 10
 			};
 
 			var ph = userManager.PasswordHasher.HashPassword(identityUser, user.Password);
@@ -114,8 +114,8 @@ namespace Registry_Backend.Controllers
 
 			if (resp.Succeeded)
 				return Ok("OK");
-			
-			throw new Exception("500");
+
+			else throw new ApplicationException(resp.Errors.FirstOrDefault()?.Description);
 		}
 	}
 }

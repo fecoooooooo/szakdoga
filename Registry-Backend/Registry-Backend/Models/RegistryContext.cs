@@ -1,9 +1,10 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Registry_Backend.Models;
 
-public partial class RegistryContext : IdentityDbContext
+public partial class RegistryContext : IdentityDbContext<IdentityUser>
 {
     public RegistryContext()
     {

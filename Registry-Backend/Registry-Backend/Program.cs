@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Registry_Backend;
@@ -52,8 +53,9 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddDbContext<RegistryContext>(opt => opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddIdentity<IdentityUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
-				.AddEntityFrameworkStores<RegistryContext>();
+builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
+				options.Lockout.AllowedForNewUsers = false
+			).AddEntityFrameworkStores<RegistryContext>();
 
 
 builder.Services.AddAuthentication(opt => {

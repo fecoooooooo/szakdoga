@@ -3,6 +3,7 @@ README.md
 api.module.ts
 api/api.ts
 api/authentication.service.ts
+api/debug.service.ts
 api/devices.service.ts
 api/softwares.service.ts
 api/users.service.ts
@@ -14,6 +15,7 @@ model/device.ts
 model/deviceHistory.ts
 model/devicesForUserResponse.ts
 model/identityUser.ts
+model/jWTTokenResponse.ts
 model/loginData.ts
 model/models.ts
 model/software.ts

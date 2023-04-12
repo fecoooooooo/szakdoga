@@ -31,13 +31,30 @@
         },
         "responses": {
           "200": {
-            "description": "Success"
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/JWTTokenResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JWTTokenResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JWTTokenResponse"
+                }
+              }
+            }
           }
         }
       }
     },
-    "/api/Authentication/DEBUG_GenerateSwaggerJson": {
-      "get": {
+    "/api/Authentication/Logout": {
+      "post": {
         "tags": [
           "Authentication"
         ],
@@ -65,10 +82,78 @@
         }
       }
     },
-    "/api/Authentication/DEBUG_Example400": {
+    "/api/Authentication/IsLoggedIn": {
       "get": {
         "tags": [
           "Authentication"
+        ],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "query",
+            "style": "form",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Debug/DEBUG_GenerateSwaggerJson": {
+      "get": {
+        "tags": [
+          "Debug"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Debug/DEBUG_Example400": {
+      "get": {
+        "tags": [
+          "Debug"
         ],
         "responses": {
           "200": {
@@ -77,10 +162,10 @@
         }
       }
     },
-    "/api/Authentication/DEBUG_Example500": {
+    "/api/Debug/DEBUG_Example500": {
       "get": {
         "tags": [
-          "Authentication"
+          "Debug"
         ],
         "responses": {
           "200": {
@@ -1200,6 +1285,20 @@
           "accessFailedCount": {
             "type": "integer",
             "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "JWTTokenResponse": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string",
+            "nullable": true
+          },
+          "userId": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false

@@ -26,15 +26,12 @@ namespace Registry_Backend.Shared
 				switch (error)
 				{
 					case AppException e:
-						// custom application error
 						response.StatusCode = (int)HttpStatusCode.BadRequest;
 						break;
 					case KeyNotFoundException e:
-						// not found error
 						response.StatusCode = (int)HttpStatusCode.NotFound;
 						break;
 					default:
-						// unhandled error
 						response.StatusCode = (int)HttpStatusCode.InternalServerError;
 						break;
 				}

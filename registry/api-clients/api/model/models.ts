@@ -2,6 +2,7 @@ export * from './device';
 export * from './deviceHistory';
 export * from './devicesForUserResponse';
 export * from './identityUser';
+export * from './jWTTokenResponse';
 export * from './loginData';
 export * from './software';
 export * from './softwareHistory';

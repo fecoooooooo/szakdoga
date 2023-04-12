@@ -20,26 +20,36 @@ export class AuthService {
   login(userName: string, password: string) {
     this.authenticationService
       .apiAuthenticationLoginPost({
-        userName: 'string', //userName,//TODO
-        password: 'string', //password//TODO
+        userName: userName,
+        password: password,
       })
       .subscribe((result) => {
         if (result) {
-          console.log(result.token);
-          localStorage.setItem('token', result.token);
-          localStorage.setItem('id', '1'); //TODO
+          if (
+            result.token !== undefined &&
+            result.token !== null &&
+            result.userId !== undefined &&
+            result.userId !== null
+          ) {
+            localStorage.setItem('token', result.token);
+            localStorage.setItem('userId', result.userId); //TODO
+          }
         }
       });
   }
 
   logout() {
-    localStorage.removeItem('token');
-    localStorage.removeItem('id');
-    this.router.navigate([`/`]);
+    this.authenticationService
+      .apiAuthenticationLogoutPost()
+      .subscribe((result) => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('userId');
+        this.router.navigate([`/`]);
+      });
   }
 
   getUserId(): string | null {
-    return localStorage.getItem('id');
+    return localStorage.getItem('userId');
   }
 
   getToken() {

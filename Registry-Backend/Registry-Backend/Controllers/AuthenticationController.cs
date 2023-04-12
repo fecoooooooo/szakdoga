@@ -28,61 +28,56 @@ namespace Registry_Backend.Controllers
 		}
 
 		[HttpPost("Login")]
+		[ProducesResponseType(typeof(JWTTokenResponse), StatusCodes.Status200OK)]
 		public async Task<IActionResult> LoginAsync([FromBody] LoginData loginData)
 		{
-			//var result = await signInManager.PasswordSignInAsync(loginData.UserName, loginData.Password, false, false);
-			var result = await signInManager.PasswordSignInAsync(loginData.UserName, loginData.Password, false, false);
-
-			if(result.Succeeded) 
-			{
-
-			}
-
-
 			if (loginData is null)
 			{
 				throw new AppException("Invalid user request!!!");
 			}
-			if (true || loginData.UserName == "string" && loginData.Password == "string")
+			else
 			{
-				var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(ConfigurationManagerExtension.AppSetting["JWT:Secret"]));
-				var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
-				var tokeOptions = new JwtSecurityToken(
-					issuer: ConfigurationManagerExtension.AppSetting["JWT:ValidIssuer"], 
-					audience: ConfigurationManagerExtension.AppSetting["JWT:ValidAudience"], claims: new List<Claim>(), 
-					expires: DateTime.Now.AddMinutes(6), 
-					signingCredentials: signinCredentials);
-				var tokenString = new JwtSecurityTokenHandler().WriteToken(tokeOptions);
-				return Ok(new JWTTokenResponse
+				var result = await signInManager.PasswordSignInAsync(loginData.UserName, loginData.Password, false, false);
+
+				if (result.Succeeded)
 				{
-					Token = tokenString
-				});
+					var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(ConfigurationManagerExtension.AppSetting["JWT:Secret"]));
+					var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
+					var tokeOptions = new JwtSecurityToken(
+						issuer: ConfigurationManagerExtension.AppSetting["JWT:ValidIssuer"],
+						audience: ConfigurationManagerExtension.AppSetting["JWT:ValidAudience"], claims: new List<Claim>(),
+						expires: DateTime.Now.AddMinutes(6),
+						signingCredentials: signinCredentials);
+					var tokenString = new JwtSecurityTokenHandler().WriteToken(tokeOptions);
+					return Ok(new JWTTokenResponse
+					{
+						Token = tokenString
+					});
+				}
 			}
 			return Unauthorized();
 		}
 
-		[HttpGet("DEBUG_GenerateSwaggerJson")]
+		[HttpPost("Logout")]
 		[ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
-		public IActionResult GetSamples()
+		public async Task<IActionResult> LogoutAsync()
 		{
-			using (var client = new WebClient())
-			{
-				client.DownloadFile("https://localhost:44301/swagger/v1/swagger.json", "..\\..\\registry\\swagger\\swagger.json");
-			}
-
+			await signInManager.SignOutAsync();
 			return Ok("OK");
 		}
 
-		[HttpGet("DEBUG_Example400")]
-		public IActionResult Example400()
+		[HttpGet("IsLoggedIn")]
+		[ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+		public async Task<IActionResult> IsLoggedIn([FromQuery] string userId)
 		{
-			throw new AppException("400");
-		}
+			var user = await userManager.FindByIdAsync(userId);
+			if(user != null)
+			{
+				var claims = await signInManager.CreateUserPrincipalAsync(user);
+				return Ok(signInManager.IsSignedIn(claims));
+			}
 
-		[HttpGet("DEBUG_Example500")]
-		public IActionResult Example500()
-		{
-			throw new Exception("500");
+			return Ok(false);
 		}
 	}
 }
