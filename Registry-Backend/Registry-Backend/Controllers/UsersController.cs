@@ -6,7 +6,7 @@ using Registry_Backend.Models;
 
 namespace Registry_Backend.Controllers
 {
-	[ApiController, /*TODO Authorize*/]
+	[ApiController, Authorize(Roles = "Adminisztrátor")]
 	[Route("api/[controller]")]
 	public class UsersController : ControllerBase
 	{

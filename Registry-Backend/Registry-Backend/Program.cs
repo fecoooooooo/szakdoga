@@ -54,8 +54,9 @@ builder.Services.AddCors(options =>
 builder.Services.AddDbContext<RegistryContext>(opt => opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
-				options.Lockout.AllowedForNewUsers = false
-			).AddEntityFrameworkStores<RegistryContext>();
+				options.Lockout.AllowedForNewUsers = false)
+	.AddRoles<IdentityRole>()
+	.AddEntityFrameworkStores<RegistryContext>();
 
 
 builder.Services.AddAuthentication(opt => {
