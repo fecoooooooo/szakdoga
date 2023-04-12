@@ -75,6 +75,7 @@ builder.Services.AddAuthentication(opt => {
 
 var app = builder.Build();
 app.UseCors("AllowAll");
+app.UseMiddleware<ErrorHandlerMiddleware>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

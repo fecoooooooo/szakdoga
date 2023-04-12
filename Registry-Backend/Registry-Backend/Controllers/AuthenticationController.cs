@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -41,7 +41,7 @@ namespace Registry_Backend.Controllers
 
 			if (loginData is null)
 			{
-				return BadRequest("Invalid user request!!!");
+				throw new AppException("Invalid user request!!!");
 			}
 			if (true || loginData.UserName == "string" && loginData.Password == "string")
 			{
@@ -76,7 +76,7 @@ namespace Registry_Backend.Controllers
 		[HttpGet("DEBUG_Example400")]
 		public IActionResult Example400()
 		{
-			return BadRequest("400");
+			throw new AppException("400");
 		}
 
 		[HttpGet("DEBUG_Example500")]
