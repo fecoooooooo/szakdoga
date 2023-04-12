@@ -19,12 +19,14 @@ namespace Registry_Backend.Controllers
 		private readonly SignInManager<IdentityUser> signInManager;
 		private readonly RegistryContext dbContext;
 		private readonly UserManager<IdentityUser> userManager;
+		private readonly RoleManager<IdentityRole> roleManager;
 
-		public AuthenticationController(RegistryContext dbContext, SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager)
+		public AuthenticationController(RegistryContext dbContext, SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
 		{
 			this.dbContext = dbContext;
 			this.signInManager = signInManager;
 			this.userManager = userManager;
+			this.roleManager = roleManager;
 		}
 
 		[HttpPost("Login")]
@@ -41,20 +43,26 @@ namespace Registry_Backend.Controllers
 
 				if (result.Succeeded)
 				{
-					var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(ConfigurationManagerExtension.AppSetting["JWT:Secret"]));
-					var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
-					var tokeOptions = new JwtSecurityToken(
-						issuer: ConfigurationManagerExtension.AppSetting["JWT:ValidIssuer"],
-						audience: ConfigurationManagerExtension.AppSetting["JWT:ValidAudience"], claims: new List<Claim>(),
-						expires: DateTime.Now.AddMinutes(6),
-						signingCredentials: signinCredentials);
-					var tokenString = new JwtSecurityTokenHandler().WriteToken(tokeOptions);
-					return Ok(new JWTTokenResponse
-					{
-						Token = tokenString
-					});
+					var user = await userManager.FindByNameAsync(loginData.UserName);
+
+					if (user != null) {
+						var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(ConfigurationManagerExtension.AppSetting["JWT:Secret"]));
+						var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
+						var tokeOptions = new JwtSecurityToken(
+							issuer: ConfigurationManagerExtension.AppSetting["JWT:ValidIssuer"],
+							audience: ConfigurationManagerExtension.AppSetting["JWT:ValidAudience"], claims: new List<Claim>(),
+							expires: DateTime.Now.AddMinutes(6),
+							signingCredentials: signinCredentials);
+						var tokenString = new JwtSecurityTokenHandler().WriteToken(tokeOptions);
+						return Ok(new JWTTokenResponse
+						{
+							Token = tokenString,
+							UserId = user.Id
+						});
+					}
 				}
 			}
+
 			return Unauthorized();
 		}
 
@@ -78,6 +86,26 @@ namespace Registry_Backend.Controllers
 			}
 
 			return Ok(false);
+		}
+
+		[HttpPost("CreateRole")]
+		[ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+		public async Task<IActionResult> CreateRole([FromBody] string roleName)
+		{
+			// Create a new role with the specified name
+			var newRole = new IdentityRole(roleName);
+
+			// Add the new role to the database
+			var result = await roleManager.CreateAsync(newRole);
+
+			if (result.Succeeded)
+			{
+				return Ok("Role created successfully!");
+			}
+			else
+			{
+				return BadRequest(result.Errors);
+			}
 		}
 	}
 }

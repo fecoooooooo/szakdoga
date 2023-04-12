@@ -12,16 +12,18 @@ namespace Registry_Backend.Controllers
 	{
 		private readonly RegistryContext dbContext;
 		private readonly UserManager<IdentityUser> userManager;
+		private readonly RoleManager<IdentityRole> roleManager;
 
-		public UsersController(RegistryContext dbContext, UserManager<IdentityUser> userManager)
+		public UsersController(RegistryContext dbContext, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
 		{
 			this.dbContext = dbContext;
 			this.userManager = userManager;
+			this.roleManager = roleManager;
 		}
 
 		[HttpGet("AllUsers")]
 		[ProducesResponseType(typeof(List<IdentityUser>), StatusCodes.Status200OK)]
-		public IActionResult GetAllUSers()
+		public IActionResult GetAllUsers()
 		{
 			var result = userManager.Users.ToList();
 			if (result != null)
@@ -62,21 +64,34 @@ namespace Registry_Backend.Controllers
 		
 		[HttpPatch("UpdateUser/{userId}")]
 		[ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
-		public async Task<IActionResult> UpdateUser([FromRoute] string userId, [FromBody] UserRequest user)
+		public async Task<IActionResult> UpdateUser([FromRoute] string userId, [FromBody] UserRequest userRequest)
 		{
 			var userToUpdate = await userManager.FindByIdAsync(userId);
 
 			if (userToUpdate != null)
 			{
-				userToUpdate.UserName = user.UserName;
-				userToUpdate.Email = user.Email;
-				userToUpdate.PhoneNumber = user.PhoneNumber;
-				userToUpdate.NormalizedUserName = user.UserName.ToUpper();
-				userToUpdate.NormalizedEmail = user.Email.ToUpper();
+				userToUpdate.UserName = userRequest.UserName;
+				userToUpdate.Email = userRequest.Email;
+				userToUpdate.PhoneNumber = userRequest.PhoneNumber;
+				userToUpdate.NormalizedUserName = userRequest.UserName.ToUpper();
+				userToUpdate.NormalizedEmail = userRequest.Email.ToUpper();
+
+				var userRoles = await userManager.GetRolesAsync(userToUpdate);
+
+				if (false == userRoles.Contains(userRequest.Role))
+				{
+					foreach (var r in userRoles) 
+						await userManager.RemoveFromRoleAsync(userToUpdate, r);
+
+					var result = await userManager.AddToRoleAsync(userToUpdate, userRequest.Role);
+
+					if (!result.Succeeded)
+						throw new ApplicationException(result.Errors.FirstOrDefault()?.Description);
+				}
 
 				dbContext.SaveChanges();
 
-				var ph = userManager.PasswordHasher.HashPassword(userToUpdate, user.Password);
+				var ph = userManager.PasswordHasher.HashPassword(userToUpdate, userRequest.Password);
 				userToUpdate.PasswordHash = ph;
 
 				return Ok("OK");
@@ -87,35 +102,54 @@ namespace Registry_Backend.Controllers
 
 		[HttpPost("AddUser")]
 		[ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
-		public async Task<IActionResult> AddUser([FromBody] UserRequest user)
+		public async Task<IActionResult> AddUser([FromBody] UserRequest userRequest)
 		{
 			var identityUser = new IdentityUser
 			{
-				UserName = user.UserName,
-				NormalizedUserName = user.UserName.ToUpper(),
-				Email = user.Email,
-				NormalizedEmail = user.Email.ToUpper(),
+				UserName = userRequest.UserName,
+				NormalizedUserName = userRequest.UserName.ToUpper(),
+				Email = userRequest.Email,
+				NormalizedEmail = userRequest.Email.ToUpper(),
 				EmailConfirmed = true,
 				PasswordHash = null,
 				SecurityStamp = null,
 				ConcurrencyStamp = null,
-				PhoneNumber = user.PhoneNumber,
+				PhoneNumber = userRequest.PhoneNumber,
 				PhoneNumberConfirmed = true,
 				TwoFactorEnabled = false,
 				LockoutEnd = null,
 				LockoutEnabled = false,
-				AccessFailedCount = 10
+				AccessFailedCount = 10,
 			};
 
-			var ph = userManager.PasswordHasher.HashPassword(identityUser, user.Password);
+			var ph = userManager.PasswordHasher.HashPassword(identityUser, userRequest.Password);
 			identityUser.PasswordHash = ph;
 
 			var resp = await userManager.CreateAsync(identityUser);
 
 			if (resp.Succeeded)
+			{
+				var userRole = await roleManager.FindByNameAsync(userRequest.Role);
+				if (userRole == null)
+				{
+					throw new ApplicationException("Role not found.");
+				}
+
 				return Ok("OK");
+			}
 
 			else throw new ApplicationException(resp.Errors.FirstOrDefault()?.Description);
+		}
+
+		[HttpPost("GetAllRoles")]
+		[ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+		public IActionResult GetAllRoles()
+		{
+			var result = roleManager.Roles.ToList();
+			if (result != null)
+				return Ok(result);
+
+			return NotFound("No rows in table");
 		}
 	}
 }

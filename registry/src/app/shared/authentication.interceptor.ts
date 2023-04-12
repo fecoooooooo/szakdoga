@@ -22,12 +22,6 @@ export class AuthenticationInterceptor implements HttpInterceptor {
     const isApiUrl = request.url.startsWith(environment.apiUrl);
     const isLoggedIn = this.authService.isLoggedIn();
 
-    console.log(environment.apiUrl);
-    console.log(request.url);
-    console.log(isApiUrl);
-    console.log(isLoggedIn);
-    console.log(this.authService.getToken()!);
-
     if (isLoggedIn && isApiUrl) {
       request = request.clone({
         headers: request.headers.set(

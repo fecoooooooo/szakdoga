@@ -51,7 +51,7 @@
           matPrefix
           mat-icon-button
           aria-label="Clear"
-          (click)="userIdControl.reset()"
+          (click)="$event.stopPropagation(); userIdControl.reset()"
         >
           <mat-icon>close</mat-icon>
         </button>

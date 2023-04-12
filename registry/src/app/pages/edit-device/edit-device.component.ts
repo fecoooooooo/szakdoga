@@ -128,16 +128,34 @@ export class EditDeviceComponent implements OnInit {
       };
 
       if (this.isCreate) {
-        this.devicesService.apiDevicesAddDevicePost(device).subscribe((r) => {
-          this.router.navigate([`/manage-devices`]);
-        });
+        this.devicesService
+          .apiDevicesAddDevicePost(device)
+          .subscribe((newId) => {
+            this.devicesService
+              .apiDevicesAddHistoryEntryPost(
+                +newId,
+                this.userIdControl.value,
+                this.userIdControl.value !== null
+              )
+              .subscribe((r) => {
+                this.router.navigate([`/manage-devices`]);
+              });
+          });
       } else {
         device.id = this.deviceId;
 
         this.devicesService
           .apiDevicesUpdateDevicePatch(device)
           .subscribe((r) => {
-            this.router.navigate([`/manage-devices`]);
+            this.devicesService
+              .apiDevicesAddHistoryEntryPost(
+                device.id,
+                this.userIdControl.value,
+                this.userIdControl.value !== null
+              )
+              .subscribe((r) => {
+                this.router.navigate([`/manage-devices`]);
+              });
           });
       }
     }
