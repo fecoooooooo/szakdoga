@@ -140,9 +140,11 @@ namespace Registry_Backend.Controllers
 			{
 				var userRole = await roleManager.FindByNameAsync(userRequest.Role);
 				if (userRole == null)
-				{
 					throw new ApplicationException("Role not found.");
-				}
+
+				var result = await userManager.AddToRoleAsync(identityUser, userRequest.Role);
+				if (!result.Succeeded)
+					throw new ApplicationException(result.Errors.FirstOrDefault()?.Description);
 
 				return Ok("OK");
 			}
