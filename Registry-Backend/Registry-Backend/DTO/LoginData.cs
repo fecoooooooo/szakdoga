@@ -2,12 +2,12 @@
 {
 	public class LoginData
 	{
-		public string? UserName
+		public string UserName
 		{
 			get;
 			set;
 		}
-		public string? Password
+		public string Password
 		{
 			get;
 			set;

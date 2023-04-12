@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using Registry_Backend.DTO;
@@ -15,21 +16,34 @@ namespace Registry_Backend.Controllers
 	[Route("api/[controller]")]
 	public class AuthenticationController : ControllerBase
 	{
+		private readonly SignInManager<IdentityUser> signInManager;
 		private readonly RegistryContext dbContext;
+		private readonly UserManager<IdentityUser> userManager;
 
-		public AuthenticationController(RegistryContext dbContext)
+		public AuthenticationController(RegistryContext dbContext, SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager)
 		{
 			this.dbContext = dbContext;
+			this.signInManager = signInManager;
+			this.userManager = userManager;
 		}
 
 		[HttpPost("Login")]
-		public IActionResult Login([FromBody] LoginData loginData)
+		public async Task<IActionResult> LoginAsync([FromBody] LoginData loginData)
 		{
+			//var result = await signInManager.PasswordSignInAsync(loginData.UserName, loginData.Password, false, false);
+			var result = await signInManager.PasswordSignInAsync(loginData.UserName, loginData.Password, false, false);
+
+			if(result.Succeeded) 
+			{
+
+			}
+
+
 			if (loginData is null)
 			{
 				return BadRequest("Invalid user request!!!");
 			}
-			if (loginData.UserName == "string" && loginData.Password == "string")
+			if (true || loginData.UserName == "string" && loginData.Password == "string")
 			{
 				var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(ConfigurationManagerExtension.AppSetting["JWT:Secret"]));
 				var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
