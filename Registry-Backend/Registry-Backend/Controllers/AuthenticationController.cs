@@ -20,13 +20,15 @@ namespace Registry_Backend.Controllers
 		private readonly RegistryContext dbContext;
 		private readonly UserManager<IdentityUser> userManager;
 		private readonly RoleManager<IdentityRole> roleManager;
+		private readonly IHttpContextAccessor httpContextAccessor;
 
-		public AuthenticationController(RegistryContext dbContext, SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
+		public AuthenticationController(RegistryContext dbContext, SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager, IHttpContextAccessor httpContextAccessor)
 		{
 			this.dbContext = dbContext;
 			this.signInManager = signInManager;
 			this.userManager = userManager;
 			this.roleManager = roleManager;
+			this.httpContextAccessor = httpContextAccessor;
 		}
 
 		[HttpPost("Login")]
@@ -84,12 +86,20 @@ namespace Registry_Backend.Controllers
 		[ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
 		public async Task<IActionResult> IsLoggedIn([FromQuery] string userId)
 		{
-			var user = await userManager.FindByIdAsync(userId);
-			if(user != null)
+
+			var claims = httpContextAccessor.HttpContext.User;
+
+			if (claims.FindFirst(ClaimTypes.NameIdentifier) != null)
 			{
-				var claims = await signInManager.CreateUserPrincipalAsync(user);
-				return Ok(signInManager.IsSignedIn(claims));
+				var Id = claims.FindFirst(ClaimTypes.NameIdentifier).Value;
+				var user = await userManager.FindByIdAsync(Id);
+				if (user != null)
+				{
+					claims = await signInManager.CreateUserPrincipalAsync(user);
+					return Ok(signInManager.IsSignedIn(claims));
+				}
 			}
+
 
 			return Ok(false);
 		}
