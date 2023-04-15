@@ -27,12 +27,19 @@
         <span class="full-width"> Felhasználó szoftverei</span>
       </mat-list-item>
 
-      <mat-list-item routerLink="/manage-users" (click)="clickNavItem($event)">
+      <mat-list-item
+        *ngIf="IsMenuItemVisible(['Adminisztrátor', 'Ügyvezeto', 'HR Vezető'])"
+        routerLink="/manage-users"
+        (click)="clickNavItem($event)"
+      >
         <mat-icon>person</mat-icon>
         <span class="full-width"> Felhasználók</span>
       </mat-list-item>
 
       <mat-list-item
+        *ngIf="
+          IsMenuItemVisible(['Adminisztrátor', 'Ügyvezeto', 'Gazdasgái Vezető'])
+        "
         routerLink="/manage-devices"
         (click)="clickNavItem($event)"
       >
@@ -41,6 +48,9 @@
       </mat-list-item>
 
       <mat-list-item
+        *ngIf="
+          IsMenuItemVisible(['Adminisztrátor', 'Ügyvezeto', 'Gazdasgái Vezető'])
+        "
         routerLink="/manage-softwares"
         (click)="clickNavItem($event)"
       >

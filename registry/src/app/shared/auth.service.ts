@@ -1,15 +1,13 @@
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthenticationService } from 'api-clients/api';
-import { Observable, defaultIfEmpty, map } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   constructor(
-    private http: HttpClient,
     private router: Router,
     private authenticationService: AuthenticationService
   ) {}
@@ -58,5 +56,9 @@ export class AuthService {
 
   getToken() {
     return localStorage.getItem('token');
+  }
+
+  getRole() {
+    return localStorage.getItem('role');
   }
 }

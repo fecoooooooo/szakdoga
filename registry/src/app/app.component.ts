@@ -39,4 +39,14 @@ export class AppComponent {
 
     event.currentTarget.classList.add('active');
   }
+
+  IsMenuItemVisible(roles: string[]) {
+    const usertRole = this.authService.getRole();
+
+    if (usertRole !== null && roles.includes(usertRole)) {
+      return true;
+    }
+
+    return false;
+  }
 }

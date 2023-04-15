@@ -13,9 +13,10 @@ import { SoftwareHistoryComponent } from './pages/software-history/software-hist
 import { UserDevicesComponent } from './pages/user-devices/user-devices.component';
 import { UserSoftwaresComponent } from './pages/user-softwares/user-softwares.component';
 import { AuthGuard } from './shared/auth.guard';
+import { Role } from './shared/role.model';
 
 const routes: Routes = [
-  { path: '', component: ListUsersComponent, canActivate: [AuthGuard] },
+  { path: '', component: UserDevicesComponent, canActivate: [AuthGuard] },
   {
     path: 'manage-users',
     children: [
@@ -24,16 +25,19 @@ const routes: Routes = [
         component: ListUsersComponent,
         pathMatch: 'full',
         canActivate: [AuthGuard],
+        data: { roles: [Role.Admin, Role.Ugyvezeto, Role.Hr] },
       },
       {
         path: 'new-user',
         component: EditUserComponent,
         canActivate: [AuthGuard],
+        data: { roles: [Role.Admin, Role.Ugyvezeto, Role.Hr] },
       },
       {
         path: 'edit-user/:id',
         component: EditUserComponent,
         canActivate: [AuthGuard],
+        data: { roles: [Role.Admin, Role.Ugyvezeto, Role.Hr] },
       },
     ],
   },
@@ -45,21 +49,25 @@ const routes: Routes = [
         component: ListDevicesComponent,
         pathMatch: 'full',
         canActivate: [AuthGuard],
+        data: { roles: [Role.Admin, Role.Ugyvezeto, Role.Gazdasagi] },
       },
       {
         path: 'new-device',
         component: EditDeviceComponent,
         canActivate: [AuthGuard],
+        data: { roles: [Role.Admin, Role.Ugyvezeto, Role.Gazdasagi] },
       },
       {
         path: 'edit-device/:id',
         component: EditDeviceComponent,
         canActivate: [AuthGuard],
+        data: { roles: [Role.Admin, Role.Ugyvezeto, Role.Gazdasagi] },
       },
       {
         path: 'device-history/:id',
         component: DeviceHistoryComponent,
         canActivate: [AuthGuard],
+        data: { roles: [Role.Admin, Role.Ugyvezeto, Role.Gazdasagi] },
       },
     ],
   },
@@ -71,21 +79,25 @@ const routes: Routes = [
         component: ListSoftwaresComponent,
         pathMatch: 'full',
         canActivate: [AuthGuard],
+        data: { roles: [Role.Admin, Role.Ugyvezeto, Role.Gazdasagi] },
       },
       {
         path: 'new-software',
         component: EditSoftwareComponent,
         canActivate: [AuthGuard],
+        data: { roles: [Role.Admin, Role.Ugyvezeto, Role.Gazdasagi] },
       },
       {
         path: 'edit-software/:id',
         component: EditSoftwareComponent,
         canActivate: [AuthGuard],
+        data: { roles: [Role.Admin, Role.Ugyvezeto, Role.Gazdasagi] },
       },
       {
         path: 'software-history/:id',
         component: SoftwareHistoryComponent,
         canActivate: [AuthGuard],
+        data: { roles: [Role.Admin, Role.Ugyvezeto, Role.Gazdasagi] },
       },
     ],
   },
