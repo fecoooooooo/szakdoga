@@ -21,6 +21,8 @@ import { IdentityRole } from '../model/identityRole';
 // @ts-ignore
 import { IdentityUser } from '../model/identityUser';
 // @ts-ignore
+import { UserNameResponse } from '../model/userNameResponse';
+// @ts-ignore
 import { UserRequest } from '../model/userRequest';
 // @ts-ignore
 import { UserResponse } from '../model/userResponse';
@@ -213,6 +215,59 @@ export class UsersService {
         }
         let lvPath = `/api/Users/AllUsers`;
         return this.httpClient.request<Array<IdentityUser>>('get', `${this.configuration.basePath}${lvPath}`,
+            {
+                context: lvHttpContext,
+                responseType: <any>responseType_,
+                headers: lvHeaders,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * @param loaderType modify the httpContext->loaderTypeToken value
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public apiUsersAllUsersNamesGet(loaderType?: 'info' | 'lock' | 'default', observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<Array<UserNameResponse>>;
+    public apiUsersAllUsersNamesGet(loaderType?: 'info' | 'lock' | 'default', observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpResponse<Array<UserNameResponse>>>;
+    public apiUsersAllUsersNamesGet(loaderType?: 'info' | 'lock' | 'default', observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpEvent<Array<UserNameResponse>>>;
+    public apiUsersAllUsersNamesGet(loaderType?: 'info' | 'lock' | 'default', observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<any> {
+        let lvHeaders = this.defaultHeaders;
+        let lvHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (lvHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'text/plain',
+                'application/json',
+                'text/json'
+            ];
+            lvHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (lvHttpHeaderAcceptSelected !== undefined) {
+            lvHeaders = lvHeaders.set('Accept', lvHttpHeaderAcceptSelected);
+        }
+        let lvHttpContext: HttpContext | undefined;
+        lvHttpContext = options && options.context;
+        if (lvHttpContext === undefined) {
+            lvHttpContext = new HttpContext();
+        }
+        if(this.loaderTypeToken) {
+            lvHttpContext.set(this.loaderTypeToken, loaderType === undefined || loaderType === null ? 'default' : loaderType);
+        }
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (lvHttpHeaderAcceptSelected) {
+            if (lvHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(lvHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+        let lvPath = `/api/Users/AllUsersNames`;
+        return this.httpClient.request<Array<UserNameResponse>>('get', `${this.configuration.basePath}${lvPath}`,
             {
                 context: lvHttpContext,
                 responseType: <any>responseType_,

@@ -6,7 +6,7 @@ using Registry_Backend.Models;
 
 namespace Registry_Backend.Controllers
 {
-	[ApiController, Authorize(Roles = "Adminisztrátor,Ügyvezető,HR Vezető")]
+	[ApiController, Authorize(Roles = "Adminisztrátor,Ügyvezető,HR Vezető,,Gazdasági Vezető")]
 	[Route("api/[controller]")]
 	public class UsersController : ControllerBase
 	{
@@ -22,6 +22,7 @@ namespace Registry_Backend.Controllers
 		}
 
 		[HttpGet("AllUsers")]
+		[Authorize(Roles = "Adminisztrátor,Ügyvezető,HR Vezető")]
 		[ProducesResponseType(typeof(List<IdentityUser>), StatusCodes.Status200OK)]
 		public IActionResult GetAllUsers()
 		{
@@ -32,8 +33,31 @@ namespace Registry_Backend.Controllers
 			return NotFound("No rows in table");
 		}
 
+		[HttpGet("AllUsersNames")]
+		[ProducesResponseType(typeof(List<UserNameResponse>), StatusCodes.Status200OK)]
+		public IActionResult GetAllUserNames()
+		{
+			var users = userManager.Users.ToList();
+			if (users != null)
+			{
+				List<UserNameResponse> usernames = new List<UserNameResponse>();
+				foreach (var u in users)
+				{
+					usernames.Add(new UserNameResponse()
+					{
+						Id = u.Id,
+						UserName = u.UserName
+					});
+				}
+				return Ok(usernames);
+			}
+
+			return NotFound("No rows in table");
+		}
+
 
 		[HttpGet("Single/{id}")]
+		[Authorize(Roles = "Adminisztrátor,Ügyvezető,HR Vezető")]
 		[ProducesResponseType(typeof(UserResponse), StatusCodes.Status200OK)]
 		public async Task<IActionResult> GetUserById([FromRoute] string id)
 		{
@@ -54,6 +78,7 @@ namespace Registry_Backend.Controllers
 		}
 
 		[HttpDelete("Delete/{id}")]
+		[Authorize(Roles = "Adminisztrátor,Ügyvezető,HR Vezető")]
 		[ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
 		public async Task<IActionResult> DeleteUser(string id)
 		{
@@ -72,6 +97,7 @@ namespace Registry_Backend.Controllers
 
 		
 		[HttpPatch("UpdateUser/{userId}")]
+		[Authorize(Roles = "Adminisztrátor,Ügyvezető,HR Vezető")]
 		[ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
 		public async Task<IActionResult> UpdateUser([FromRoute] string userId, [FromBody] UserRequest userRequest)
 		{
@@ -110,6 +136,7 @@ namespace Registry_Backend.Controllers
 		}
 
 		[HttpPost("AddUser")]
+		[Authorize(Roles = "Adminisztrátor,Ügyvezető,HR Vezető")]
 		[ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
 		public async Task<IActionResult> AddUser([FromBody] UserRequest userRequest)
 		{
@@ -153,6 +180,7 @@ namespace Registry_Backend.Controllers
 		}
 
 		[HttpGet("GetAllRoles")]
+		[Authorize(Roles = "Adminisztrátor,Ügyvezető,HR Vezető")]
 		[ProducesResponseType(typeof(List<IdentityRole>), StatusCodes.Status200OK)]
 		public IActionResult GetAllRoles()
 		{

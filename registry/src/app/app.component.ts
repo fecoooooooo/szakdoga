@@ -41,9 +41,9 @@ export class AppComponent {
   }
 
   IsMenuItemVisible(roles: string[]) {
-    const usertRole = this.authService.getRole();
+    const userRole = this.authService.getRole();
 
-    if (usertRole !== null && roles.includes(usertRole)) {
+    if (userRole !== null && roles.includes(userRole)) {
       return true;
     }
 

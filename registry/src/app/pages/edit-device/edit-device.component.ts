@@ -70,7 +70,7 @@ export class EditDeviceComponent implements OnInit {
     this.isCreate = id === null;
 
     forkJoin({
-      users: this.usersService.apiUsersAllUsersGet(),
+      users: this.usersService.apiUsersAllUsersNamesGet(),
       devices: this.devicesService.apiDevicesAllDevicesGet(),
     }).subscribe((result) => {
       this.users = result.users;

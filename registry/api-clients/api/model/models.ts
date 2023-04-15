@@ -8,5 +8,6 @@ export * from './loginData';
 export * from './software';
 export * from './softwareHistory';
 export * from './softwaresForUserResponse';
+export * from './userNameResponse';
 export * from './userRequest';
 export * from './userResponse';

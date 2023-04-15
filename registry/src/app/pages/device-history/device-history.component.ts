@@ -38,7 +38,7 @@ export class DeviceHistoryComponent {
 
     forkJoin({
       history: this.devicesService.apiDevicesHistoryForDeviceIdGet(+id!),
-      users: this.usersService.apiUsersAllUsersGet(),
+      users: this.usersService.apiUsersAllUsersNamesGet(),
       devices: this.devicesService.apiDevicesAllDevicesGet(),
     }).subscribe((result) => {
       this.dataSource = new MatTableDataSource<DeviceHistory>(result.history);

@@ -45,7 +45,7 @@ export class SoftwareHistoryComponent {
 
     forkJoin({
       history: this.softwaresService.apiSoftwaresHistoryForSoftwareIdGet(+id!),
-      users: this.usersService.apiUsersAllUsersGet(),
+      users: this.usersService.apiUsersAllUsersNamesGet(),
       softwares: this.softwaresService.apiSoftwaresAllSoftwaresGet(),
     }).subscribe((result) => {
       this.dataSource = new MatTableDataSource<SoftwareHistory>(result.history);

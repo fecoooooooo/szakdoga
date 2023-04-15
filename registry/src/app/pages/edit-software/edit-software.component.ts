@@ -74,7 +74,7 @@ export class EditSoftwareComponent {
     this.isCreate = id === null;
 
     forkJoin({
-      users: this.usersService.apiUsersAllUsersGet(),
+      users: this.usersService.apiUsersAllUsersNamesGet(),
       softwares: this.softwaresService.apiSoftwaresAllSoftwaresGet(),
     }).subscribe((result) => {
       this.users = result.users;

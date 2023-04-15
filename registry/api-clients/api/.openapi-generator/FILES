@@ -22,6 +22,7 @@ model/models.ts
 model/software.ts
 model/softwareHistory.ts
 model/softwaresForUserResponse.ts
+model/userNameResponse.ts
 model/userRequest.ts
 model/userResponse.ts
 param.ts

@@ -47,7 +47,7 @@ export class ListSoftwaresComponent {
   ngOnInit(): void {
     forkJoin({
       softwares: this.softwaresService.apiSoftwaresAllSoftwaresGet(),
-      users: this.usersService.apiUsersAllUsersGet(),
+      users: this.usersService.apiUsersAllUsersNamesGet(),
     }).subscribe((result) => {
       this.dataSource = new MatTableDataSource<Software>(result.softwares);
       this.users = result.users;
