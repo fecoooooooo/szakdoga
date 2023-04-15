@@ -8,7 +8,7 @@ using System.Net;
 
 namespace Registry_Backend.Controllers
 {
-	[ApiController, Authorize]
+	[ApiController, Authorize(Roles = "Adminisztrátor,Ügyvezető,HR Vezető,Gazdasági Vezető,Munkatárs")]
 	[Route("api/[controller]")]
 	public class SoftwaresController : ControllerBase
 	{
@@ -21,6 +21,7 @@ namespace Registry_Backend.Controllers
 			this.userManager = userManager;
 		}
 
+		[Authorize(Roles = "Adminisztrátor,Ügyvezető,Gazdasági Vezető")]
 		[HttpGet("AllSoftwares")]
 		[ProducesResponseType(typeof(List<Software>), StatusCodes.Status200OK)]
 		public IActionResult GetAllSoftwares()
@@ -32,6 +33,7 @@ namespace Registry_Backend.Controllers
 			return NotFound("No rows in table");
 		}
 
+		[Authorize(Roles = "Adminisztrátor,Ügyvezető,Gazdasági Vezető")]
 		[HttpGet("Single/{id}")]
 		[ProducesResponseType(typeof(Software), StatusCodes.Status200OK)]
 		public IActionResult GetSoftwareById([FromRoute] int id)
@@ -43,6 +45,7 @@ namespace Registry_Backend.Controllers
 			return NotFound($"No software with id: {id}");
 		}
 
+		[Authorize(Roles = "Adminisztrátor,Ügyvezető,Gazdasági Vezető")]
 		[HttpDelete("Delete/{id}")]
 		[ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
 		public IActionResult DeleteSoftware(int id)
@@ -59,6 +62,7 @@ namespace Registry_Backend.Controllers
 		}
 
 
+		[Authorize(Roles = "Adminisztrátor,Ügyvezető,Gazdasági Vezető")]
 		[HttpPatch("UpdateSoftware")]
 		[ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
 		public IActionResult UpdateSoftware([FromBody] Software software)
@@ -84,6 +88,7 @@ namespace Registry_Backend.Controllers
 			return NotFound($"No software with id: {software.Id}");
 		}
 
+		[Authorize(Roles = "Adminisztrátor,Ügyvezető,Gazdasági Vezető")]
 		[HttpPost("AddSoftware")]
 		[ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
 		public IActionResult AddSoftware([FromBody] Software software)
@@ -95,6 +100,7 @@ namespace Registry_Backend.Controllers
 		}
 
 
+		[Authorize(Roles = "Adminisztrátor,Ügyvezető,Gazdasági Vezető")]
 		[HttpGet("HistoryForSoftware/{id}")]
 		[ProducesResponseType(typeof(List<SoftwareHistory>), StatusCodes.Status200OK)]
 		public IActionResult GetHistoryForSoftwareById([FromRoute] int id)
@@ -137,6 +143,7 @@ namespace Registry_Backend.Controllers
 			return Ok(response);
 		}
 
+		[Authorize(Roles = "Adminisztrátor,Ügyvezető,Gazdasági Vezető")]
 		[HttpPost("AddHistoryEntry")]
 		[ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
 		public async Task<IActionResult> AddHistoryEntry([FromQuery] int softwareId, [FromQuery] string? userId, [FromQuery] bool startAssignment)

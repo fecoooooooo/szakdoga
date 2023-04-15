@@ -11,6 +11,8 @@ import { ToastrService } from 'ngx-toastr';
 
 @Injectable()
 export class RequestInterceptor implements HttpInterceptor {
+  readonly untrackedUrls: string[] = ['Authentication'];
+
   constructor(private toastrService: ToastrService) {}
 
   intercept(
@@ -20,11 +22,13 @@ export class RequestInterceptor implements HttpInterceptor {
     return next.handle(req).pipe(
       tap((e) => {
         if (e instanceof HttpResponse) {
+          e.url;
           if (
-            req.method === 'PATCH' ||
-            req.method === 'PUT' ||
-            req.method === 'POST' ||
-            req.method === 'DELETE'
+            (req.method === 'PATCH' ||
+              req.method === 'PUT' ||
+              req.method === 'POST' ||
+              req.method === 'DELETE') &&
+            this.isTrackedUrl(req.url)
           ) {
             this.toastrService.success('', 'Sikeres művelet');
           }
@@ -37,5 +41,17 @@ export class RequestInterceptor implements HttpInterceptor {
         return throwError(err);
       })
     );
+  }
+
+  isTrackedUrl(url: string) {
+    let result = true;
+
+    this.untrackedUrls.forEach((e) => {
+      if (url.includes(e)) {
+        result = false;
+      }
+    });
+
+    return result;
   }
 }

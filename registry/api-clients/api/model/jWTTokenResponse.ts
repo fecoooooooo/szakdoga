@@ -12,5 +12,6 @@
 export interface JWTTokenResponse { 
     token?: string | null;
     userId?: string | null;
+    role?: string | null;
 }
 

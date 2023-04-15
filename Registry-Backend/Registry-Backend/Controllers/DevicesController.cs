@@ -8,7 +8,7 @@ using System.Net;
 
 namespace Registry_Backend.Controllers
 {
-	[ApiController, Authorize]
+	[ApiController, Authorize(Roles = "Adminisztrátor,Ügyvezető,HR Vezető,Gazdasági Vezető,Munkatárs")]
 	[Route("api/[controller]")]
 	public class DevicesController : ControllerBase
 	{
@@ -20,7 +20,8 @@ namespace Registry_Backend.Controllers
 			this.dbContext = dbContext;
 			this.userManager = userManager;
 		}
-
+		
+		[Authorize(Roles = "Adminisztrátor,Ügyvezető,Gazdasági Vezető")]
 		[HttpGet("AllDevices")]
 		[ProducesResponseType(typeof(List<Device>), StatusCodes.Status200OK)]
 		public IActionResult GetSamples()
@@ -32,6 +33,7 @@ namespace Registry_Backend.Controllers
 			return NotFound("No rows in table");
 		}
 
+		[Authorize(Roles = "Adminisztrátor,Ügyvezető,Gazdasági Vezető")]
 		[HttpGet("Single/{id}")]
 		[ProducesResponseType(typeof(Device), StatusCodes.Status200OK)]
 		public IActionResult GetDeviceById([FromRoute] int id)
@@ -43,6 +45,7 @@ namespace Registry_Backend.Controllers
 			return NotFound($"No device with id: {id}");
 		}
 
+		[Authorize(Roles = "Adminisztrátor,Ügyvezető,Gazdasági Vezető")]
 		[HttpDelete("Delete/{id}")]
 		[ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
 		public IActionResult DeleteDevice(int id)
@@ -59,6 +62,7 @@ namespace Registry_Backend.Controllers
 		}
 
 
+		[Authorize(Roles = "Adminisztrátor,Ügyvezető,Gazdasági Vezető")]
 		[HttpPatch("UpdateDevice")]
 		[ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
 		public IActionResult UpdateDevice([FromBody] Device device)
@@ -83,6 +87,7 @@ namespace Registry_Backend.Controllers
 			return NotFound($"No device with id: {device.Id}");
 		}
 
+		[Authorize(Roles = "Adminisztrátor,Ügyvezető,Gazdasági Vezető")]
 		[HttpPost("AddDevice")]
 		[ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
 		public IActionResult AddDevice([FromBody] Device device)
@@ -94,6 +99,7 @@ namespace Registry_Backend.Controllers
 		}
 
 
+		[Authorize(Roles = "Adminisztrátor,Ügyvezető,Gazdasági Vezető")]
 		[HttpGet("HistoryForDevice/{id}")]
 		[ProducesResponseType(typeof(List<DeviceHistory>), StatusCodes.Status200OK)]
 		public IActionResult GetHistoryForDeviceById([FromRoute] int id)
@@ -136,6 +142,7 @@ namespace Registry_Backend.Controllers
 			return Ok(response);
 		}
 
+		[Authorize(Roles = "Adminisztrátor,Ügyvezető,Gazdasági Vezető")]
 		[HttpPost("AddHistoryEntry")]
 		[ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
 		public async Task<IActionResult> AddHistoryEntry([FromQuery] int deviceId, [FromQuery] string? userId, [FromQuery] bool startAssignment)
