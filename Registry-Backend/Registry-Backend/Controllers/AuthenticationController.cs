@@ -84,44 +84,14 @@ namespace Registry_Backend.Controllers
 
 		[HttpGet("IsLoggedIn")]
 		[ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
-		public async Task<IActionResult> IsLoggedIn([FromQuery] string userId)
+		public IActionResult IsLoggedIn()
 		{
-
-			var claims = httpContextAccessor.HttpContext.User;
-
-			if (claims.FindFirst(ClaimTypes.NameIdentifier) != null)
+			if (User.Identity != null)
 			{
-				var Id = claims.FindFirst(ClaimTypes.NameIdentifier).Value;
-				var user = await userManager.FindByIdAsync(Id);
-				if (user != null)
-				{
-					claims = await signInManager.CreateUserPrincipalAsync(user);
-					return Ok(signInManager.IsSignedIn(claims));
-				}
+				return Ok(User.Identity.IsAuthenticated);
 			}
-
 
 			return Ok(false);
-		}
-
-		[HttpPost("CreateRole")]
-		[ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
-		public async Task<IActionResult> CreateRole([FromBody] string roleName)
-		{
-			// Create a new role with the specified name
-			var newRole = new IdentityRole(roleName);
-
-			// Add the new role to the database
-			var result = await roleManager.CreateAsync(newRole);
-
-			if (result.Succeeded)
-			{
-				return Ok("Role created successfully!");
-			}
-			else
-			{
-				return BadRequest(result.Errors);
-			}
 		}
 	}
 }

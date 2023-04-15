@@ -17,8 +17,6 @@ export class AuthenticationInterceptor implements HttpInterceptor {
     request: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-    // Modify the request object here
-
     const isApiUrl = request.url.startsWith(environment.apiUrl);
     const isLoggedIn = this.authService.isLoggedIn();
 

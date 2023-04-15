@@ -29,6 +29,7 @@ export class AuthService {
         .then((response: any) => {
           localStorage.setItem('token', response.token);
           localStorage.setItem('userId', response.userId);
+          localStorage.setItem('role', response.role);
 
           resolve(true);
         })
@@ -43,12 +44,12 @@ export class AuthService {
   logout() {
     this.authenticationService
       .apiAuthenticationLogoutPost()
-      .subscribe((result) => {
-        localStorage.removeItem('token');
-        localStorage.removeItem('userId');
+      .subscribe((result) => {});
 
-        this.router.navigate([`/`]);
-      });
+    this.router.navigate([`/`]);
+    localStorage.removeItem('token');
+    localStorage.removeItem('userId');
+    localStorage.removeItem('role');
   }
 
   getUserId(): string | null {

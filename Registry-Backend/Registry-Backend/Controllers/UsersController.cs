@@ -162,5 +162,23 @@ namespace Registry_Backend.Controllers
 
 			return NotFound("No rows in table");
 		}
+
+		/*[HttpPost("CreateRole")]
+	[ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+	public async Task<IActionResult> CreateRole([FromBody] string roleName)
+	{
+		var newRole = new IdentityRole(roleName);
+
+		var result = await roleManager.CreateAsync(newRole);
+
+		if (result.Succeeded)
+		{
+			return Ok("Role created successfully!");
+		}
+		else
+		{
+			return BadRequest(result.Errors);
+		}
+	}*/
 	}
 }
